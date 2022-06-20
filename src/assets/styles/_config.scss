@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3 {
+   
+    margin: 0;
+}
+
+h1, h2 { font-weight: bold; }
+h2 { font-size: 24px; }
+h3 { font-weight: 400; }
+
+.container {
+    padding-inline: 30px;
+}
+html {
+    background-color: lightgray  ;
+}
+
+body {
+    margin: auto;
+    font-family: 'Noto Serif Hebrew', serif !important;
+    font-weight: 600 !important;  
+    // width: 360px;
+    // height: 800px;
+    background-color: white;
+    #root {
+        height: 100%;
+
+        .App {
+            height: 100%;
+
+            & > *:not(.Home) {
+                padding: 26px;
+            }
+        }
+    }
+
+}

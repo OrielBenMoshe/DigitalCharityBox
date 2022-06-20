@@ -1,0 +1,25 @@
+.SwitchItem {
+    @include flex(space-between, center);
+    // height: 64px;
+    .ant-switch {
+        margin-inline: 10px;
+    }
+    img {
+        width: 54.01px;
+        height: 54px;
+    }
+    label { font-weight: revert;}
+    .other-sum-wrapper {
+        position: relative;
+        .ant-input-number {
+            width: 70px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+    // input {    
+    // }
+
+}

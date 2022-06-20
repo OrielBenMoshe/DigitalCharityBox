@@ -1,13 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import './assets/fonts/NotoSerifHebrew-Black.ttf';
+import './assets/fonts/NotoSerifHebrew-SemiBold.ttf';
+import './assets/fonts/NotoSerifHebrew-Light.ttf';
+import './assets/fonts/NotoSerifHebrew-Thin.ttf';
+
+import { BrowserRouter } from "react-router-dom";
+
+import { ConfigProvider } from "antd";
+import heIL from "antd/lib/locale/he_IL";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <ConfigProvider locale={heIL} direction="rtl">
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ConfigProvider>
   </React.StrictMode>
 );
 
