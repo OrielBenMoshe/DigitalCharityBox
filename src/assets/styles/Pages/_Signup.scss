@@ -1,0 +1,27 @@
+.Signup {
+    @include flex(space-between, center, column);
+    height: 100%;
+    
+    
+    .steps-content {
+        height: 100%;
+        padding-block: 26px;
+    }
+    .steps-action {
+        @include flex(space-between);
+        width: 100%;
+    }
+    .settings {
+        height: 100%;
+    }
+}
+
+.settings {
+    .headers {
+        text-align: center;
+        margin-bottom: 42px;
+    }
+    .coins-list > .ant-divider:last-child {
+        display: none;
+     } 
+}
