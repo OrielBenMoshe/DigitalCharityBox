@@ -27,14 +27,11 @@ function Header() {
             visible={visible} 
             width="60%"
         >
+          
+            <Settings title={"ניהול תזכורת"}/>
             <Settings title={"פרטים אישיים"}/>
             <Settings title={"הגדרות תצוגה"}/>
             <Settings title={"פרטי כרטיס אשראי"}/>
-            <Settings title={"הגדרות תזכורת"}/>
-            {/* <p>פרטי כרטיס אשראי</p>
-            <p>עריכת פרטים אישיים</p>
-            <p>הגדרות תצוגה</p>
-            <p>הגדרות נוספות</p> */}
         </Drawer>
     );
 

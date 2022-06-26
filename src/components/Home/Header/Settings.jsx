@@ -1,53 +1,76 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Drawer } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Button, Drawer } from "antd";
+import {
+  BellOutlined,
+  CreditCardOutlined,
+  UserOutlined,
+  SketchOutlined,
+} from "@ant-design/icons";
 
-import DisplaySettings from '../../settings/DisplaySettings';
-import MemoSettings from '../../settings/MemoSettings';
-import CreditDetailsForm from '../../settings/CreditDetailsForm';
-import PersonalDetailsForm from '../../settings/PersonalDetailsForm';
+import DisplaySettings from "../../settings/DisplaySettings";
+import MemoSettings from "../../settings/MemoSettings";
+import CreditDetailsForm from "../../settings/CreditDetailsForm";
+import PersonalDetailsForm from "../../settings/PersonalDetailsForm";
 
 export default function Settings(props) {
-    const [visible, setVisible] = useState(false);
-    const [content, setContent] = useState();
+  const [visible, setVisible] = useState(false);
+  const [content, setContent] = useState();
+  const [icon, setIcon] = useState(null);
 
-    const showSettings = () => {
-        setVisible(true);
-    };
+  const showSettings = () => {
+    setVisible(true);
+  };
 
-    const onClose = () => {
-        setVisible(false);
-    };
+  const onClose = () => {
+    setVisible(false);
+  };
 
-    useEffect(() => {
-        setContent(() => {
-            switch (props.title) {
-                case "פרטים אישיים":
-                    return <PersonalDetailsForm/>;
-                case "הגדרות תצוגה":
-                    return <DisplaySettings/>                  
-                case "פרטי כרטיס אשראי":
-                    return <CreditDetailsForm/>           
-                case "הגדרות תזכורת":
-                    return <MemoSettings/>
-                default:
-                    break;
-            }
-        })
-    }, [])
+  useEffect(() => {
+    setContent(() => {
+      switch (props.title) {
+        case "ניהול תזכורת":
+          return <MemoSettings />;
+        case "פרטים אישיים":
+          return <PersonalDetailsForm />;
+        case "הגדרות תצוגה":
+          return <DisplaySettings />;
+        case "פרטי כרטיס אשראי":
+          return <CreditDetailsForm />;
+        default:
+          break;
+      }
+    });
+    setIcon(() => {
+      switch (props.title) {
+        case "ניהול תזכורת":
+          return <BellOutlined />;
+        case "פרטים אישיים":
+          return <UserOutlined />;
+        case "הגדרות תצוגה":
+          return <SketchOutlined />;
+        case "פרטי כרטיס אשראי":
+          return <CreditCardOutlined />;
+        default:
+          break;
+      }
+    });
+  }, []);
 
-
-    return (
-        <div className="Settings-item">
-            <Button type='text' onClick={showSettings}>{props.title}</Button>
-            <Drawer
-                // title={props.title}
-                placement="left"
-                onClose={onClose}
-                visible={visible}
-                width="100%"
-            >
-                {content}
-            </Drawer>
-        </div>
-    )
+  return (
+    <div className="Settings-item">
+      <Button type="text" onClick={showSettings}>
+        {" "}
+        {icon} {props.title}
+      </Button>
+      <Drawer
+        // title={props.title}
+        placement="left"
+        onClose={onClose}
+        visible={visible}
+        width="100%"
+      >
+        {content}
+      </Drawer>
+    </div>
+  );
 }
