@@ -1,12 +1,20 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from "react-router-dom";
 import { Button } from 'antd';
 
-
 import SwitchItem from './SwitchItem';
+
+import { state } from '../../state';
+import { useSnapshot, subscribe  } from 'valtio';
 
 
 export default function MemoSettings() {
+    const snap = useSnapshot(state);
+
+    useEffect(() => {
+       console.log(snap.user);
+    }, [])
+
     return (
         <div className="settings DisplaySettingsForm">
             <div className='headers'>

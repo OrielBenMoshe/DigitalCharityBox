@@ -13,13 +13,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/Signup" element={<Signup />}>
-          {/* <Route index element={<PersonalDetailsForm />} />
-          <Route path="PersonalDetailsForm" element={<PersonalDetailsForm />} />
-          <Route path="DisplaySettings" element={<DisplaySettings />} />
-          <Route path="CreditDetailsForm" element={<CreditDetailsForm />} />
-          <Route path="*" element={<Home />} /> */}
-        </Route>
+        <Route path="/Signup" element={<Signup />}/>
         <Route index element={<Home />} />
         <Route path="/Home" element={<Home />} />
       </Routes>

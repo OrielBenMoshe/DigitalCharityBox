@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { Button } from 'antd';
 
-import EserAgurot from "../../assets/images/eserAgurot_tails.svg";
-import HatsiShekel from "../../assets/images/hatsiShekel_tails.svg";
+// import EserAgurot from "../../assets/images/eserAgurot_tails.svg";
+// import HatsiShekel from "../../assets/images/hatsiShekel_tails.svg";
 import Shekel from "../../assets/images/shekel_tails.svg";
 import Shnekel from "../../assets/images/shnekel_tails.svg";
 import HameshShekel from "../../assets/images/hameshShekel_tails.svg";
@@ -21,14 +21,6 @@ export default function DisplaySettingsForm() {
                 <h3>אלו מטבעות להציג באפליקציה בלי לבזבז זמן מיותר?</h3>
             </div>
             <div className="coins-list">
-                <SwitchItem 
-                    key={1}
-                    type="coin"
-                    label="חצי שקל"
-                    value={0.5}
-                    image={HatsiShekel}
-                    defaultChecked={false}
-                />
                 <SwitchItem 
                     key={2}
                     type="coin"

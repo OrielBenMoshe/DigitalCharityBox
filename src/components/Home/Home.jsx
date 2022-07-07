@@ -1,58 +1,129 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Dropdown, Menu, message, InputNumber } from 'antd';
 
+/** Dragg & Dropp */
+import { DndContext } from '@dnd-kit/core';
+import { Draggable } from '../Draggable';
+import { Droppable } from '../Droppable';
+
+/** Global State */
+import { state } from '../../state';
+import { useSnapshot, subscribe } from 'valtio';
+
+/** Images of coins */
 import Header from './Header/Header';
 import Shekel from "../../assets/images/shekel_tails.svg";
+import Shnekel from "../../assets/images/shnekel_tails.svg";
+import HameshShekel from "../../assets/images/hameshShekel_tails.svg";
+import EserShekel from "../../assets/images/eserShekel_tails.svg";
 import CharityBox from "../../assets/images/charity_box.png"
 
 const firstEntry = (
-    <>
+    <div id='first-entry' className='container'>
         <h1 className='entry-title'>קופת הצדקה הדיגיטלית שלך</h1>
         <Link to="/Signup">
             <Button>בואו נתחיל!</Button>
         </Link>
-    </>
+    </div>
 )
 
-const coin = (
-    <img src={Shekel} alt={Shekel} />
-)
 
-// useEffect(() => {
-
-// }, [])
 
 export default function Home() {
+    const { user } = useSnapshot(state);
+    const [isConnected, setIsConnected] = useState(true); // Check if user logged-in.
+    const [displayCoins, setDisplayCoins] = useState([]);
+    const [parent, setParent] = useState(null);
+    const [child, setChild] = useState(null);
+
+
+    const createCoinElements = (coins) => {
+        return coins.map((coin, key) => {
+            let coinSrc;
+            let idName;
+            switch (coin.value) {
+                case 1:
+                    coinSrc = Shekel;
+                    idName = 'Shekel';
+                    break;
+                case 2:
+                    coinSrc = Shnekel;
+                    idName = 'Shnekel';
+                    break;
+                case 5:
+                    coinSrc = HameshShekel;
+                    idName = 'HameshShekel';
+                    break;
+                case 10:
+                    coinSrc = EserShekel;
+                    idName = 'EserShekel';
+                    break;
+                default:
+                    break;
+            }
+
+            return coin.active && (
+                <Draggable key={key} id={idName} className="coin" value={coin.value}>
+                    <img src={coinSrc} alt={coin.value} />
+                </Draggable>
+            )
+        })
+    }
+    const handleDragEnd = (event) => {
+        const { over } = event;
+
+        // If the item is dropped over a container, set it as the parent
+        // otherwise reset the parent to `null`
+        setParent(over ? over.id : null);
+        setChild(over ? { id: event.active.id } : null);
+        console.log(over);
+        // state.user.totalAmount += droppedCoin.value;
+    }
+
+    useEffect(() => {
+        setDisplayCoins(createCoinElements(user.display.coins));
+    }, []);
+
+
     return (
         <div className='Home'>
-            {/* { firstEntry } */}
-            <Header/>
-            {/* <h1>עֵץ חַיִּים הִיא לַמַּחֲזִיקִים בָּהּ וְתֹמְכֶיהָ מְאֻשָּׁר</h1> */}
-            <div className="charity-box">
-                <img src={CharityBox} alt="" />
-            </div>
-            <div className="container">
-                <div className="sum-wrapper">
-                    <p>הסכום שהצטבר בקופה:</p>
-                    <div className="sum">{"24.50"}₪</div>
-                </div>
-                <div className="coins-wrapper">
-                    {coin}
-                    {coin}
-                    {coin}
-                    {coin}
-                </div>
-            </div>
-            <div className="other-amount-wrapper">
-                <label>סכום אחר:</label>
-                <InputNumber
-                    defaultValue={13}
-                    formatter={(value) => `₪ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                />
-                <Button>הכנס ↑</Button>
-            </div>
+            {
+                isConnected ?
+                    (<div id='front-app'>
+                        <Header />
+                        <DndContext onDragEnd={handleDragEnd}>
+                            <Droppable id="charityBox" className="charity-box">
+                                <div className="coins-wrapper">
+                                    {parent === "charityBox"
+                                        && displayCoins.find(coin => coin.props.id === child.id )}
+                                </div>
+                                <img className='charity-box-image' src={CharityBox} alt="" />
+                            </Droppable>
+                            <div className="container">
+                                <div className="sum-wrapper">
+                                    <div>הסכום שהצטבר בקופה:</div>
+                                    <h2 className="sum"><span>₪</span>{user.totalAmount || 0}</h2>
+                                </div>
+                                <div className="coins-wrapper">
+                                    {child
+                                        ? (displayCoins.filter(coin => (child && coin.props) && coin.props.id !== child.id))
+                                        : displayCoins}
+                                </div>
+                            </div>
+                        </DndContext>
+                        <div className="other-amount-wrapper">
+                            <label>סכום אחר:</label>
+                            <InputNumber
+                                defaultValue={13}
+                                formatter={(value) => `₪ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                            />
+                            <Button>הכנס ↑</Button>
+                        </div>
+                    </div>) :
+                    firstEntry
+            }
         </div>
     )
 }
