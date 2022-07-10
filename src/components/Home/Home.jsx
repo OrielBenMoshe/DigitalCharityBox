@@ -77,8 +77,7 @@ export default function Home() {
         // otherwise reset the parent to `null`
         setParent(over ? over.id : null);
         setChild(over ? { id: event.active.id } : null);
-        console.log(over);
-        // state.user.totalAmount += droppedCoin.value;
+        // console.log(event); 
     }
 
     useEffect(() => {

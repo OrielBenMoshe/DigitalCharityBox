@@ -57,12 +57,23 @@
             overflow: hidden;
             width: 100%;
             height: 60%;
+            z-index: 0;
 
             &-image {
                 position: absolute;
                 top: -10%;
                 right: 0;
                 width: 100%;
+            }
+
+            &.is-dropped {
+                .coin {
+                    transform: translateY(100%);
+                }
+            }
+            .coins-wrapper {
+                overflow: hidden;
+                z-index: 2;
             }
         }
 
@@ -80,19 +91,11 @@
             }
         }
 
-        .charity-box {
-            &.is-dropped {
-                .coin {
-                    transform: translateY(100%);
-                } 
-            }
-        }
 
         .coins-wrapper {
             @include flex(center, center);
             gap: 6px;
             position: relative;
-            z-index: 1;
 
             .coin {
                 border-radius: 50px;
@@ -100,6 +103,7 @@
                 background: none;
                 transition: border 0.3s;
                 transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1);
+
                 &:hover,
                 &:active {
                     border-color: #c9c9c9;

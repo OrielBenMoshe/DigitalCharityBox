@@ -2,6 +2,9 @@ import React, { useRef, useEffect } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { useState } from 'react';
 
+/** Global State */
+import { state } from '../state';
+
 export function Droppable(props) {
     const { isOver, setNodeRef, node } = useDroppable({
         id: props.id,
@@ -14,14 +17,19 @@ export function Droppable(props) {
 
     useEffect(() => {
         const droppedCoin = props.children[0].props.children.props;
-        // console.log('droppedCoin:', droppedCoin);
+        console.log('droppedCoin:', droppedCoin);
         if (droppedCoin) {
             setTimeout(() => {
                 setIsDropped('is-dropped');
+                // state.user.totalAmount += droppedCoin.value;
             }, 400);
         }
     }, [props.children])
 
+    useEffect(() => {
+        console.log("isOver:", isOver);
+    }, [isOver])
+    
 
     return (
         <div className={`${props.className} ${isDropped}`} ref={setNodeRef} style={style}>
