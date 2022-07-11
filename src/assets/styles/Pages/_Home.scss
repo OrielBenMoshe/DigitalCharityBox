@@ -96,18 +96,18 @@
             @include flex(center, center);
             gap: 6px;
             position: relative;
-
+            
+            .coin:hover,
+            .coin:active {
+                border-color: #c9c9c9;
+            }
             .coin {
                 border-radius: 50px;
                 border: 5px solid transparent;
                 background: none;
-                transition: border 0.3s;
+                transition: border 0.5s;
                 transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1);
 
-                &:hover,
-                &:active {
-                    border-color: #c9c9c9;
-                }
 
                 img {
                     width: 70px;
@@ -116,12 +116,38 @@
             }
         }
 
-        .other-amount-wrapper {
+        #ManualAmountBar {
+            @include flex(space-between, center);
             width: 100%;
             padding: 10px 30px;
             margin-top: 26px;
             border-radius: 12px 12px 0 0;
             background-color: $primary-color;
+            .ant-input-number {
+                position: relative;
+                margin-inline-start: 78px;
+                width: 72px;
+                &::after {
+                    content: "₪";
+                    position: absolute;
+                    left: 26px;
+                    top: 56%;
+                    transform: translateY(-50%);
+                    font-weight: 200;
+                    font-size: 12px;
+                }
+                &::before {
+                    content: "סכום אחר:";
+                    position: absolute;
+                    right: -78px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-weight: 200;
+                    font-size: 18px;
+                    width: max-content;
+                }
+            }
+
         }
     }
 

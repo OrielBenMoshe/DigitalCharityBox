@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Drawer } from "antd";
 import {
   BellOutlined,
@@ -16,6 +16,9 @@ export default function Settings(props) {
   const [visible, setVisible] = useState(false);
   const [content, setContent] = useState();
   const [icon, setIcon] = useState(null);
+  
+  const [personalForm, setPersonalForm] = useState();
+  const refForm = useRef(null);
 
   const showSettings = () => {
     setVisible(true);
@@ -25,13 +28,21 @@ export default function Settings(props) {
     setVisible(false);
   };
 
+  const formHandle = (ref) => {
+    if (!ref.response) {
+        setPersonalForm(ref)
+    } else {
+
+    }
+}
+
   useEffect(() => {
     setContent(() => {
       switch (props.title) {
         case "ניהול תזכורת":
           return <MemoSettings />;
         case "פרטים אישיים":
-          return <PersonalDetailsForm />;
+          return <PersonalDetailsForm ref={refForm} formHandle={formHandle} />;
         case "הגדרות תצוגה":
           return <DisplaySettings />;
         case "פרטי כרטיס אשראי":

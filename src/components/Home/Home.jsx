@@ -18,6 +18,7 @@ import Shnekel from "../../assets/images/shnekel_tails.svg";
 import HameshShekel from "../../assets/images/hameshShekel_tails.svg";
 import EserShekel from "../../assets/images/eserShekel_tails.svg";
 import CharityBox from "../../assets/images/charity_box.png"
+import ManualAmountBar from './ManualAmountBar';
 
 const firstEntry = (
     <div id='first-entry' className='container'>
@@ -77,7 +78,10 @@ export default function Home() {
         // otherwise reset the parent to `null`
         setParent(over ? over.id : null);
         setChild(over ? { id: event.active.id } : null);
-        // console.log(event); 
+        setTimeout(() => { // Remove the coin from charity-box after dropped over/.
+            setParent(null)
+            setChild(null)
+        }, 800);
     }
 
     useEffect(() => {
@@ -95,7 +99,7 @@ export default function Home() {
                             <Droppable id="charityBox" className="charity-box">
                                 <div className="coins-wrapper">
                                     {parent === "charityBox"
-                                        && displayCoins.find(coin => coin.props.id === child.id )}
+                                        && displayCoins.find(coin => coin.props.id === child.id)}
                                 </div>
                                 <img className='charity-box-image' src={CharityBox} alt="" />
                             </Droppable>
@@ -111,15 +115,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </DndContext>
-                        <div className="other-amount-wrapper">
-                            <label>סכום אחר:</label>
-                            <InputNumber
-                                defaultValue={13}
-                                formatter={(value) => `₪ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                            />
-                            <Button>הכנס ↑</Button>
-                        </div>
+                        <ManualAmountBar/>
                     </div>) :
                     firstEntry
             }

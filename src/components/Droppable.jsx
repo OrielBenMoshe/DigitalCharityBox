@@ -16,20 +16,16 @@ export function Droppable(props) {
     };
 
     useEffect(() => {
-        const droppedCoin = props.children[0].props.children.props;
-        console.log('droppedCoin:', droppedCoin);
-        if (droppedCoin) {
+        const droppedCoin = props.children[0].props.children.props;        if (droppedCoin) {
             setTimeout(() => {
                 setIsDropped('is-dropped');
-                // state.user.totalAmount += droppedCoin.value;
+                setTimeout(() => {
+                    setIsDropped('')
+                    state.user.totalAmount += droppedCoin.value;
+                }, 400);
             }, 400);
         }
-    }, [props.children])
-
-    useEffect(() => {
-        console.log("isOver:", isOver);
-    }, [isOver])
-    
+    }, [props.children])    
 
     return (
         <div className={`${props.className} ${isDropped}`} ref={setNodeRef} style={style}>

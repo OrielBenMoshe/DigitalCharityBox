@@ -26,8 +26,8 @@ body {
     margin: auto;
     font-family: 'Noto Serif Hebrew', serif !important;
     font-weight: 600 !important;  
-    // width: 360px;
-    // height: 800px;
+    max-width: 480px;
+    max-height: 900px;
     background-color: white;
     #root {
         height: 100%;
