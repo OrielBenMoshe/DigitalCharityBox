@@ -16,34 +16,33 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
     const format = 'HH:mm';
     const snap = useSnapshot(state);
     const coins = snap.user.display.coins;
+    const reminders = snap.user.reminders;
 
     const handleRepresentation = () => {
         switch (type) {
             case "coin":
-                setRepresentation( !manual
-                    ? ( <img src={image} alt='coin' /> )
+                setRepresentation(!manual
+                    ? (<img src={image} alt='coin' />)
                     : (
                         <div className='manual-value-wrapper'>
-                            <img src={image} alt='coin' style={{visibility: "hidden"}}/>
-                            <InputNumber 
-                                min={3} 
-                                max={500} 
-                                keyboard={true} 
-                                value={manualValue} 
+                            <img src={image} alt='coin' style={{ visibility: "hidden" }} />
+                            <InputNumber
+                                min={3}
+                                max={500}
+                                keyboard={true}
+                                value={manualValue}
                                 onChange={handleValueChange}
                                 disabled={disabled}
                             />
                         </div>)
-                    );
+                );
                 break;
             case "memo":
-                console.log("disabled:", disabled);
-                // break;
                 setRepresentation(
                     <TimePicker
-                        defaultValue={moment('18:00', format)}
                         format={format}
                         value={moment(manualValue, format)}
+                        onChange={handleValueChange}
                         clearText={true}
                         disabled={disabled}
                     />
@@ -55,11 +54,30 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
         }
     }
     const handleValueChange = (val) => {
-        console.log(val);
-        setManualValue(val);
-        const manualValueIndex = coins.findIndex(coin => coin.manual);
-        state.user.display.coins[manualValueIndex].value = val;
-        updateDisplaySettings(val, true)
+        let manualValueIndex;
+        switch (type) {
+            case "coin":
+                console.log("coin:",val);
+                setManualValue(val);
+                manualValueIndex = coins.findIndex(coin => coin.manual);
+                state.user.display.coins[manualValueIndex].value = val;
+                updateDisplaySettings(val, true)
+
+                break;
+            case "memo":
+                const time = moment(val, format);
+                console.log("memo:",time);
+
+                setManualValue(time);
+                manualValueIndex = reminders.findIndex(reminder => reminder.label === label);
+                state.user.reminders[manualValueIndex].time = time;
+                // updateDisplaySettings(time, true)
+
+                break;
+
+            default:
+                break;
+        }
     }
 
     // Update changes in the global state.
@@ -68,8 +86,8 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
             case "coin":
                 /** Turns the coin representation on or off as the user changes.  */
                 for (let i in coins) {
-                    if ( coins[i].value === val ) {
-                        state.user.display.coins[i].active = isChecked; 
+                    if (coins[i].value === val) {
+                        state.user.display.coins[i].active = isChecked;
                         break;
                     }
                 }
@@ -92,7 +110,7 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
     useEffect(() => {
         handleRepresentation();
     }, [disabled, manualValue]);
-        
+
     return (
         <>
             <div className='SwitchItem'>

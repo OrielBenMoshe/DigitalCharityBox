@@ -10,10 +10,7 @@ import { useSnapshot, subscribe  } from 'valtio';
 
 export default function MemoSettings() {
     const snap = useSnapshot(state);
-
-    useEffect(() => {
-       console.log(snap.user);
-    }, [])
+    const reminders = snap.user.reminders
 
     return (
         <div className="settings DisplaySettingsForm">
@@ -21,27 +18,16 @@ export default function MemoSettings() {
                 <h1>ניהול תזכורות</h1>
                 <h3>מתי להזכיר לך שאפשר לתת צדקה ממש מכאן?</h3>
             </div>
-            <div className="coins-list">
-                <SwitchItem 
-                    key={1}
-                    type="memo"
-                    label="בשחרית"
-                    value={"8:10"}
-                    defaultChecked={true}
-                />
-                <SwitchItem 
-                    key={2}
-                    type="memo"
-                    label="במנחה"
-                    value={"14:00"}
-                    defaultChecked={false}
-                />
-                <SwitchItem
-                    key={3} 
-                    type="memo"
-                    label="בזמן אחר"
-                    defaultChecked={false}
-                />
+            <div className="coins-list">.
+                { reminders.map((reminder, key) => 
+                    <SwitchItem 
+                        key={key}
+                        type="memo"
+                        label={reminder.label}
+                        value={reminder.time}
+                        defaultChecked={reminder.active}
+                    />
+                )}
             </div>
         </div>
     )

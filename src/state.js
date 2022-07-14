@@ -1,8 +1,7 @@
 import { proxy } from "valtio";
-import { devtools } from 'valtio/utils';
+import { devtools } from "valtio/utils";
 
 // import { Storage } from '@capacitor/storage';
-
 
 // const getSavedData = async (key) => {
 //       const ret = await Storage.get({ key: key });
@@ -11,8 +10,7 @@ import { devtools } from 'valtio/utils';
 // }
 // getSavedData('user');
 
-
-const user = /* getSavedData() ? getSavedData() : */  {
+const user = /* getSavedData() ? getSavedData() : */ {
   personalInfo: {
     firstName: "אוריאל",
     lastName: "בן משה",
@@ -26,16 +24,26 @@ const user = /* getSavedData() ? getSavedData() : */  {
     token: "",
     last4digits: "",
   },
-  reminders: {
-    morning: {
+  reminders: [
+    {
+      name: "shacharit",
+      label: "בשחרית",
       active: true,
-      time: "8:25",
+      time: "8:20",
     },
-    afternoon: {
+    {
+      name: "mincha",
+      label: "במנחה",
       active: true,
       time: "16:00",
     },
-  },
+    {
+      name: "manual",
+      label: "בזמן אחר:",
+      active: false,
+      time: "10:00",
+    },
+  ],
   display: {
     coins: [
       { value: 1, active: true },
@@ -55,8 +63,7 @@ const user = /* getSavedData() ? getSavedData() : */  {
 // }
 // savePersonalInfo(user);
 
-
 const state = proxy({ user });
-const unsub = devtools(state, { name: 'state name', enabled: true })
+const unsub = devtools(state, { name: "state name", enabled: true });
 
 export { state };
