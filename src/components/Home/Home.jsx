@@ -33,6 +33,7 @@ const firstEntry = (
 
 export default function Home() {
     const { user } = useSnapshot(state);
+    const userName = user.personalInfo.firstName;
     const [isConnected, setIsConnected] = useState(true); // Check if user logged-in.
     const [displayCoins, setDisplayCoins] = useState([]);
     const [parent, setParent] = useState(null);
@@ -96,6 +97,7 @@ export default function Home() {
                     (<div id='front-app'>
                         <Header />
                         <DndContext onDragEnd={handleDragEnd}>
+                            <h2>{`שלום ${userName}! טוב לראותך`}</h2>
                             <Droppable id="charityBox" className="charity-box">
                                 <div className="coins-wrapper">
                                     {parent === "charityBox"

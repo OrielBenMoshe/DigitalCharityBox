@@ -1,6 +1,10 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { Button } from 'antd';
+
+/** Global State */
+import { state } from '../../state';
+import { useSnapshot, subscribe } from 'valtio';
+
 
 // import EserAgurot from "../../assets/images/eserAgurot_tails.svg";
 // import HatsiShekel from "../../assets/images/hatsiShekel_tails.svg";
@@ -13,7 +17,39 @@ import EserShekel from "../../assets/images/eserShekel_tails.svg";
 import SwitchItem from './SwitchItem';
 
 
-export default function DisplaySettingsForm() {
+export default function DisplaySettingsForm({onClose}) {
+    const snap = useSnapshot(state);
+    const coinsData = snap.user.display.coins;
+
+    const valueToLabel = (value) => {
+        switch (value) {
+            case 1:
+                return "שקל אחד"
+            case 2:
+                return "שני שקל"
+            case 5:
+                return "חמש שקל"
+            case 10:
+                return "עשר שקל"
+            default:
+                return "סכום אחר:";
+        }
+    }
+
+    const valueToImage = (value) => {
+        switch (value) {
+            case 1:
+                return Shekel;
+            case 2:
+                return Shnekel;
+            case 5:
+                return HameshShekel;
+            case 10:
+                return EserShekel;
+            default:
+                return EserShekel;
+        }
+    }
     return (
         <div className="settings DisplaySettingsForm">
             <div className='headers'>
@@ -21,47 +57,27 @@ export default function DisplaySettingsForm() {
                 <h3>אלו מטבעות להציג באפליקציה בלי לבזבז זמן מיותר?</h3>
             </div>
             <div className="coins-list">
-                <SwitchItem 
-                    key={2}
-                    type="coin"
-                    label="שקל אחד"
-                    value={1}
-                    image={Shekel}
-                    defaultChecked={true}
-                />
-                <SwitchItem
-                    key={3} 
-                    type="coin"
-                    label="שני שקל"
-                    value={2}
-                    image={Shnekel}
-                    defaultChecked={true}
-                />
-                <SwitchItem 
-                    key={4} 
-                    type="coin"
-                    label="חמש שקל"
-                    value={5}
-                    image={HameshShekel}
-                    defaultChecked={false}
-                />
-                <SwitchItem 
-                    key={5}
-                    type="coin"
-                    label="עשר שקל"
-                    value={10}
-                    image={EserShekel}
-                    defaultChecked={true}
-                />
-                <SwitchItem 
-                    key={6}
-                    type="coin"
-                    label="סכום אחר:"
-                    image={EserShekel}
-                    defaultChecked={true}
-                />
-                
+                {coinsData.map((coin, key) => {
+                    return (
+                        <SwitchItem
+                            key={key}
+                            type="coin"
+                            label={valueToLabel(coin.value)}
+                            value={coin.value}
+                            image={valueToImage(coin.value)}
+                            defaultChecked={coin.active}
+                            manual={coin.manual}
+                        />
+                    );
+                })}
             </div>
+            { onClose && 
+                <div style={{ textAlign: "center", marginTop: "42px" }}>
+                    <Button type="primary" onClick={onClose} size='large'>
+                        שמור
+                    </Button>
+                </div> 
+            }
         </div>
     )
 }

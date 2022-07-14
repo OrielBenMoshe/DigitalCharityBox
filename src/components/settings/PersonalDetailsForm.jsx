@@ -8,19 +8,20 @@ import { useSnapshot } from 'valtio';
 import { Storage } from '@capacitor/storage';
 
 export default function PersonalDetailsForm(props) {
-    // const [savedData, setSavedData] = useState();
+    const [initialValues, setInitialValues] = useState({ ...state.user.personalInfo });
     const personalForm = useRef();
     const firstInput = useRef();
     const snap = useSnapshot(state);
     console.log("personalInfo:", snap.user);
 
-    const savePersonalInfo = async (values) => {
+    const savePersonalInfo = (values) => {
         // await Storage.set({ key: "personalInfo", value: JSON.stringify(values) })
         state.user.personalInfo = { ...state.user.personalInfo, ...values };
     }
 
     const onFinish = (values) => {
         savePersonalInfo(values);
+        // props.setVisible(false);
         props.formHandle({ response: "success" })
     };
 
@@ -50,6 +51,7 @@ export default function PersonalDetailsForm(props) {
                 layout="vertical"
                 initialValues={{
                     remember: true,
+                    ...initialValues
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -68,7 +70,7 @@ export default function PersonalDetailsForm(props) {
                     ]}
                     initialValue={""}
                 >
-                    <Input ref={firstInput}/>
+                    <Input ref={firstInput} />
                 </Form.Item>
                 <Form.Item
                     label="שם משפחה"
@@ -80,7 +82,7 @@ export default function PersonalDetailsForm(props) {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     label="מספר טלפון"
@@ -92,13 +94,13 @@ export default function PersonalDetailsForm(props) {
                         },
                     ]}
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     label="דואר אלקטרוני"
                     name="email"
                 >
-                    <Input/>
+                    <Input />
                 </Form.Item>
                 <Form.Item
                 >
@@ -110,7 +112,7 @@ export default function PersonalDetailsForm(props) {
                             width: 'calc(56%)',
                         }}
                     >
-                        <Input/>
+                        <Input />
                     </Form.Item>
                     <Form.Item
                         label="ישוב"
@@ -121,15 +123,17 @@ export default function PersonalDetailsForm(props) {
                             marginInlineStart: "13px"
                         }}
                     >
-                        <Input/>
+                        <Input />
                     </Form.Item>
                 </Form.Item>
 
                 {
                     !props.isSignup &&
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
+                    <Form.Item style={{textAlign: "center"}}>
+                        <Button type="primary" htmlType="submit" size='large'>
+                            שמור
+                        </Button>
+                    </Form.Item>
                 }
             </Form>
         </div>

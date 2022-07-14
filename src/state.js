@@ -1,4 +1,6 @@
 import { proxy } from "valtio";
+import { devtools } from 'valtio/utils';
+
 // import { Storage } from '@capacitor/storage';
 
 
@@ -40,6 +42,7 @@ const user = /* getSavedData() ? getSavedData() : */  {
       { value: 2, active: true },
       { value: 5, active: true },
       { value: 10, active: true },
+      { value: 18, active: false, manual: true },
     ],
   },
   totalAmount: 16,
@@ -54,5 +57,6 @@ const user = /* getSavedData() ? getSavedData() : */  {
 
 
 const state = proxy({ user });
+const unsub = devtools(state, { name: 'state name', enabled: true })
 
 export { state };

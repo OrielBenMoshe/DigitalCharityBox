@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Divider, Switch, TimePicker, InputNumber } from 'antd';
 import moment from 'moment';
 
+/** Global State */
 import { state } from '../../state';
-import { useSnapshot } from 'valtio';
+import { useSnapshot, subscribe } from 'valtio';
 
+/** Capacitor LocalStorage library */
 import { Storage } from '@capacitor/storage';
 
-export default function SwitchItem({ defaultChecked, label, value, type, image }) {
+export default function SwitchItem({ defaultChecked, label, value, type, image, manual }) {
     const [representation, setRepresentation] = useState();
-    const [disabled, setDisabled] = useState(defaultChecked ? false : true);
+    const [manualValue, setManualValue] = useState(value);
+    const [disabled, setDisabled] = useState(!defaultChecked);
     const format = 'HH:mm';
     const snap = useSnapshot(state);
+    const coins = snap.user.display.coins;
 
     const handleRepresentation = () => {
         switch (type) {
             case "coin":
-                image &&
-                    setRepresentation(
-                        <img src={image} alt='coin' />
-                    );
-                !value &&
-                    setRepresentation(
-                        <div className='other-sum-wrapper'>
-                            <img src={image} alt='coin' />
-                            <InputNumber min={3} max={500} keyboard={true} defaultValue={3} />
-                        </div>
+                setRepresentation( !manual
+                    ? ( <img src={image} alt='coin' /> )
+                    : (
+                        <div className='manual-value-wrapper'>
+                            <img src={image} alt='coin' style={{visibility: "hidden"}}/>
+                            <InputNumber 
+                                min={3} 
+                                max={500} 
+                                keyboard={true} 
+                                value={manualValue} 
+                                onChange={handleValueChange}
+                                disabled={disabled}
+                            />
+                        </div>)
                     );
                 break;
             case "memo":
@@ -36,7 +43,7 @@ export default function SwitchItem({ defaultChecked, label, value, type, image }
                     <TimePicker
                         defaultValue={moment('18:00', format)}
                         format={format}
-                        value={value && moment(value, format)}
+                        value={moment(manualValue, format)}
                         clearText={true}
                         disabled={disabled}
                     />
@@ -47,26 +54,25 @@ export default function SwitchItem({ defaultChecked, label, value, type, image }
                 break;
         }
     }
+    const handleValueChange = (val) => {
+        console.log(val);
+        setManualValue(val);
+        const manualValueIndex = coins.findIndex(coin => coin.manual);
+        state.user.display.coins[manualValueIndex].value = val;
+        updateDisplaySettings(val, true)
+    }
 
-    const saveSetting = async (type, val, checked) => {
-        console.log("dsfg");
+    // Update changes in the global state.
+    const updateDisplaySettings = async (val, isChecked) => {
         switch (type) {
             case "coin":
-                const { value } = await Storage.get({ key: 'display' });
-                if (value) {
-                    const display = JSON.parse(value);
-                    const coinsArr = display.coins;
-                    const objIndex = coinsArr.findIndex((obj => obj['value'] === val));
-                    objIndex 
-                        ? coinsArr[objIndex].active = checked
-                        : coinsArr = [...coinsArr, {value: val, active: checked}]
-                    display = {...display, coins: coinsArr};
-                    await Storage.set({ key: "display", value: JSON.stringify(display) })
-                } else {
-                    const display = { coins: [ { value: val, active: checked } ] };
-                    await Storage.set({ key: "display", value: JSON.stringify(display) })
+                /** Turns the coin representation on or off as the user changes.  */
+                for (let i in coins) {
+                    if ( coins[i].value === val ) {
+                        state.user.display.coins[i].active = isChecked; 
+                        break;
+                    }
                 }
-
                 break;
 
             case "memo":
@@ -78,16 +84,15 @@ export default function SwitchItem({ defaultChecked, label, value, type, image }
         }
     }
 
-    const handleSwitch = (checked, e) => {
-        console.log(checked);
-        setDisabled(!checked);
-        saveSetting(type, value, checked)
+    const handleSwitch = (isChecked, e) => {
+        setDisabled(!isChecked);
+        updateDisplaySettings(value, isChecked);
     }
 
     useEffect(() => {
         handleRepresentation();
-    }, [disabled]);
-
+    }, [disabled, manualValue]);
+        
     return (
         <>
             <div className='SwitchItem'>

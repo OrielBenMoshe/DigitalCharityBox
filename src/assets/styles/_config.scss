@@ -21,20 +21,25 @@ h3 { font-weight: 400; }
 html {
     background-color: lightgray  ;
 }
-
 body {
-    margin: auto;
     font-family: 'Noto Serif Hebrew', serif !important;
     font-weight: 600 !important;  
-    max-width: 480px;
-    max-height: 900px;
     background-color: white;
+    &, .ant-drawer {
+        margin: auto;
+        max-width: 480px;
+        max-height: 900px;
+    }
+    .ant-drawer{
+        right: 50%;
+        transform: translateX(50%);
+    }
     #root {
         height: 100%;
         overflow: hidden;
         .App {
             height: 100%;
-
+            overflow: hidden;
             & > *:not(.Home) {
                 padding: 26px;
             }

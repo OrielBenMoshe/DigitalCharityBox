@@ -16,7 +16,7 @@ export default function Settings(props) {
   const [visible, setVisible] = useState(false);
   const [content, setContent] = useState();
   const [icon, setIcon] = useState(null);
-  
+
   const [personalForm, setPersonalForm] = useState();
   const refForm = useRef(null);
 
@@ -30,11 +30,12 @@ export default function Settings(props) {
 
   const formHandle = (ref) => {
     if (!ref.response) {
-        setPersonalForm(ref)
+      setPersonalForm(ref);
     } else {
+      ref.response === "success" && setVisible(false);
 
     }
-}
+  }
 
   useEffect(() => {
     setContent(() => {
@@ -42,9 +43,9 @@ export default function Settings(props) {
         case "ניהול תזכורת":
           return <MemoSettings />;
         case "פרטים אישיים":
-          return <PersonalDetailsForm ref={refForm} formHandle={formHandle} />;
+          return <PersonalDetailsForm formHandle={formHandle} />;
         case "הגדרות תצוגה":
-          return <DisplaySettings />;
+          return <DisplaySettings onClose={onClose}/>;
         case "פרטי כרטיס אשראי":
           return <CreditDetailsForm />;
         default:
