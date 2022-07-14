@@ -14,13 +14,13 @@ import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import heIL from "antd/lib/locale/he_IL";
 
-import 'dotenv/config';
+require('dotenv').config();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ConfigProvider locale={heIL} direction="rtl">
-      <BrowserRouter basename={process.env.HOMEPAGE}>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <App />
       </BrowserRouter>
     </ConfigProvider>
