@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/DigitalCharityBox/precache-manifest.fb545a9bb8f08bd496457d5d64e9272d.js"
+  "/DigitalCharityBox/precache-manifest.37eec94272035ceacf40f669adba8be0.js"
 );
 
 workbox.clientsClaim();
