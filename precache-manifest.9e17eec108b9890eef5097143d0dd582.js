@@ -1,31 +1,31 @@
 self.__precacheManifest = [
   {
-    "revision": "af20a3e932eea603e778",
+    "revision": "07de3dc6c05b2dc1ec2e",
     "url": "/DigitalCharityBox/static/css/main.d363b9c6.chunk.css"
   },
   {
-    "revision": "af20a3e932eea603e778",
-    "url": "/DigitalCharityBox/static/js/main.90189322.chunk.js"
+    "revision": "07de3dc6c05b2dc1ec2e",
+    "url": "/DigitalCharityBox/static/js/main.5b6d31b3.chunk.js"
   },
   {
-    "revision": "2fce172e19790446a0bd",
-    "url": "/DigitalCharityBox/static/js/runtime~main.0413a00e.js"
+    "revision": "c1c9879e372c045d6efe",
+    "url": "/DigitalCharityBox/static/js/runtime~main.47db0ab1.js"
   },
   {
-    "revision": "e908f6e5c26149f087e6",
+    "revision": "08f2aa93bb0f20781774",
     "url": "/DigitalCharityBox/static/css/2.33664958.chunk.css"
   },
   {
-    "revision": "e908f6e5c26149f087e6",
-    "url": "/DigitalCharityBox/static/js/2.9e84d4ff.chunk.js"
+    "revision": "08f2aa93bb0f20781774",
+    "url": "/DigitalCharityBox/static/js/2.b8fae91d.chunk.js"
   },
   {
-    "revision": "a6e9cacf3b01ce5bdcaa",
-    "url": "/DigitalCharityBox/static/js/3.80c52d07.chunk.js"
+    "revision": "a8808e803d1862b9a842",
+    "url": "/DigitalCharityBox/static/js/3.3d104ffd.chunk.js"
   },
   {
-    "revision": "e2af469b452ef5c4a3d0",
-    "url": "/DigitalCharityBox/static/js/4.d54f2997.chunk.js"
+    "revision": "326ddaa2ff51d062fd6c",
+    "url": "/DigitalCharityBox/static/js/4.1725684f.chunk.js"
   },
   {
     "revision": "02391add6cb0cd324ddc5ee870a9c7b6",
@@ -64,7 +64,7 @@ self.__precacheManifest = [
     "url": "/DigitalCharityBox/static/media/NotoSerifHebrew-Thin.b82c5a7c.ttf"
   },
   {
-    "revision": "5cdc36b896c106103a1b92f6f7326c98",
+    "revision": "7d1d49d705d7785a392ff8e006ddfb3d",
     "url": "/DigitalCharityBox/index.html"
   }
 ];
