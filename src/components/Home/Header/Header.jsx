@@ -42,9 +42,9 @@ function Header() {
             </div> */}
             <Settings title={"פרטים אישיים"}/>
             <Divider/>
-            <Settings title={"ניהול תזכורת"}/>
-            <Divider/>
             <Settings title={"הגדרות תצוגה"}/>
+            <Divider/>
+            <Settings title={"ניהול תזכורת"}/>
             <Divider/>
             <Settings title={"פרטי כרטיס אשראי"}/>
             <Divider/>

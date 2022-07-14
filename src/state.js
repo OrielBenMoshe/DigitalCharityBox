@@ -26,19 +26,16 @@ const user = /* getSavedData() ? getSavedData() : */ {
   },
   reminders: [
     {
-      name: "shacharit",
       label: "בשחרית",
       active: true,
       time: "8:20",
     },
     {
-      name: "mincha",
       label: "במנחה",
       active: true,
       time: "16:00",
     },
     {
-      name: "manual",
       label: "בזמן אחר:",
       active: false,
       time: "10:00",

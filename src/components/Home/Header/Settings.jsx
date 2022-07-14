@@ -40,12 +40,12 @@ export default function Settings(props) {
   useEffect(() => {
     setContent(() => {
       switch (props.title) {
-        case "ניהול תזכורת":
-          return <MemoSettings />;
         case "פרטים אישיים":
           return <PersonalDetailsForm formHandle={formHandle} />;
         case "הגדרות תצוגה":
-          return <DisplaySettings onClose={onClose}/>;
+          return <DisplaySettings onClose={onClose} />;
+        case "ניהול תזכורת":
+          return <MemoSettings onClose={onClose} />;
         case "פרטי כרטיס אשראי":
           return <CreditDetailsForm />;
         default:

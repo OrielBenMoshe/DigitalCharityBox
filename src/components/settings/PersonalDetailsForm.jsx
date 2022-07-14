@@ -47,6 +47,7 @@ export default function PersonalDetailsForm(props) {
                 <h3>כדי לרשום את החשבונית על שמך ולשלוח לך בדואר</h3>
             </div>
             <Form
+                className='content'
                 name="basic"
                 layout="vertical"
                 initialValues={{

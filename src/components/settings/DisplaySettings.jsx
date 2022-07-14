@@ -12,7 +12,7 @@ import Shekel from "../../assets/images/shekel_tails.svg";
 import Shnekel from "../../assets/images/shnekel_tails.svg";
 import HameshShekel from "../../assets/images/hameshShekel_tails.svg";
 import EserShekel from "../../assets/images/eserShekel_tails.svg";
-
+import empty_coin from "../../assets/images/empty_coin.svg";
 
 import SwitchItem from './SwitchItem';
 
@@ -47,7 +47,7 @@ export default function DisplaySettingsForm({onClose}) {
             case 10:
                 return EserShekel;
             default:
-                return EserShekel;
+                return empty_coin;
         }
     }
     return (
@@ -56,7 +56,7 @@ export default function DisplaySettingsForm({onClose}) {
                 <h1>הגדרות לתצוגה</h1>
                 <h3>אלו מטבעות להציג באפליקציה בלי לבזבז זמן מיותר?</h3>
             </div>
-            <div className="coins-list">
+            <div className="content coins-list">
                 {coinsData.map((coin, key) => {
                     return (
                         <SwitchItem
@@ -72,9 +72,9 @@ export default function DisplaySettingsForm({onClose}) {
                 })}
             </div>
             { onClose && 
-                <div style={{ textAlign: "center", marginTop: "42px" }}>
+                <div className="footer" style={{ textAlign: "center", marginTop: "42px" }}>
                     <Button type="primary" onClick={onClose} size='large'>
-                        שמור
+                        סגור
                     </Button>
                 </div> 
             }

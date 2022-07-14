@@ -25,7 +25,7 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
                     ? (<img src={image} alt='coin' />)
                     : (
                         <div className='manual-value-wrapper'>
-                            <img src={image} alt='coin' style={{ visibility: "hidden" }} />
+                            <img src={image} alt='coin' /*style={{ visibility: "hidden" }}*/ />
                             <InputNumber
                                 min={3}
                                 max={500}
@@ -57,31 +57,26 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
         let manualValueIndex;
         switch (type) {
             case "coin":
-                console.log("coin:",val);
+                console.log("coin:", val);
                 setManualValue(val);
                 manualValueIndex = coins.findIndex(coin => coin.manual);
                 state.user.display.coins[manualValueIndex].value = val;
-                updateDisplaySettings(val, true)
+                updateActivityStatus(val, true)
 
                 break;
             case "memo":
-                const time = moment(val, format);
-                console.log("memo:",time);
-
+                const time = moment(val).format(format);
                 setManualValue(time);
                 manualValueIndex = reminders.findIndex(reminder => reminder.label === label);
                 state.user.reminders[manualValueIndex].time = time;
-                // updateDisplaySettings(time, true)
-
                 break;
-
             default:
                 break;
         }
     }
 
-    // Update changes in the global state.
-    const updateDisplaySettings = async (val, isChecked) => {
+    /** Update switch changes in the global state. */ 
+    const updateActivityStatus = async (val, isChecked) => {
         switch (type) {
             case "coin":
                 /** Turns the coin representation on or off as the user changes.  */
@@ -92,11 +87,14 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
                     }
                 }
                 break;
-
             case "memo":
-
+                for (let i in reminders) {
+                    if (reminders[i].time === val) {
+                        state.user.reminders[i].active = isChecked;
+                        break;
+                    }
+                }
                 break;
-
             default:
                 break;
         }
@@ -104,7 +102,7 @@ export default function SwitchItem({ defaultChecked, label, value, type, image, 
 
     const handleSwitch = (isChecked, e) => {
         setDisabled(!isChecked);
-        updateDisplaySettings(value, isChecked);
+        updateActivityStatus(value, isChecked);
     }
 
     useEffect(() => {

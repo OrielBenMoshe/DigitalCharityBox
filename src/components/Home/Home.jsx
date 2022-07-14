@@ -13,10 +13,11 @@ import { useSnapshot, subscribe } from 'valtio';
 
 /** Images of coins */
 import Header from './Header/Header';
-import Shekel from "../../assets/images/shekel_tails.svg";
-import Shnekel from "../../assets/images/shnekel_tails.svg";
-import HameshShekel from "../../assets/images/hameshShekel_tails.svg";
-import EserShekel from "../../assets/images/eserShekel_tails.svg";
+import Shekel from "../../assets/images/shekel_heads.svg";
+import Shnekel from "../../assets/images/shnekel_heads.svg";
+import HameshShekel from "../../assets/images/hameshShekel_heads.svg";
+import EserShekel from "../../assets/images/eserShekel_heads.svg";
+import EmptyCoin from "../../assets/images/empty_coin.svg";
 import CharityBox from "../../assets/images/charity_box.png"
 import ManualAmountBar from './ManualAmountBar';
 
@@ -32,7 +33,8 @@ const firstEntry = (
 
 
 export default function Home() {
-    const { user } = useSnapshot(state);
+    const snap = useSnapshot(state);
+    const user = snap.user;
     const userName = user.personalInfo.firstName;
     const [isConnected, setIsConnected] = useState(true); // Check if user logged-in.
     const [displayCoins, setDisplayCoins] = useState([]);
@@ -62,12 +64,15 @@ export default function Home() {
                     idName = 'EserShekel';
                     break;
                 default:
+                    coinSrc = EmptyCoin;
+                    idName = 'EmptyCoin';
                     break;
             }
 
             return coin.active && (
                 <Draggable key={key} id={idName} className="coin" value={coin.value}>
                     <img src={coinSrc} alt={coin.value} />
+                    {idName === 'EmptyCoin' && <h2>{coin.value}</h2>}
                 </Draggable>
             )
         })
@@ -87,7 +92,7 @@ export default function Home() {
 
     useEffect(() => {
         setDisplayCoins(createCoinElements(user.display.coins));
-    }, []);
+    }, [user.display.coins]);
 
 
     return (

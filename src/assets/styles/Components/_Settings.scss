@@ -1,0 +1,31 @@
+.settings {
+    @include flex(space-between, center, column);
+    height: 100%;
+    .headers {
+        text-align: center;
+        margin-bottom: 42px;
+    }
+    .content {
+        height: 100%;
+        width: 100%;
+        padding-inline: 1vw;
+    }
+    .content > .ant-divider:last-child {
+        display: none;
+     } 
+    .manual-value-wrapper .ant-input-number {
+        // position: relative;
+        &::after {
+            content: "₪";
+            position: absolute;
+            left: 26px;
+            top: 56%;
+            transform: translateY(-50%);
+            font-weight: 200;
+            font-size: 12px;
+        }
+    }
+    .footer {
+
+    }
+}
