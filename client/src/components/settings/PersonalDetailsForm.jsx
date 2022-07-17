@@ -13,14 +13,14 @@ export default function PersonalDetailsForm(props) {
     const personalForm = useRef();
     const firstInput = useRef();
     const snap = useSnapshot(state);
-    console.log("personalInfo:", snap.user);
-    console.log(initialValues);
+    // console.log("personalInfo:", snap.user);
+    // console.log(initialValues);
+    // console.log('Success:', state.user);
 
     const savePersonalInfo = (values) => {
         // await Storage.set({ key: "personalInfo", value: JSON.stringify(values) })
         // state.user.personalInfo = { ...state.user.personalInfo, ...values };
     }
-    console.log('Success:', state.user);
 
 
     const onFinish = (values) => {

@@ -29,6 +29,7 @@ function App() {
   initializeApp(firebaseConfig);
   const auth = getAuth();
   // state.user = detailsUsers[0];
+  console.log(detailsUsers);
 
   useEffect(() => {
     onAuthStateChanged(auth, (userForFirebase) => {
