@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from "react-router-dom";
-import { Button, Dropdown, Menu, message, InputNumber } from 'antd';
 
 /** Dragg & Dropp */
 import { DndContext } from '@dnd-kit/core';
@@ -11,32 +9,23 @@ import { Droppable } from '../Droppable';
 import { state } from '../../state';
 import { useSnapshot, subscribe } from 'valtio';
 
-/** Images of coins */
+import FirstEntry from './FirstEntry';
 import Header from './Header/Header';
+import ManualAmountBar from './ManualAmountBar';
+
+/** Images of coins */
 import Shekel from "../../assets/images/shekel_heads.svg";
 import Shnekel from "../../assets/images/shnekel_heads.svg";
 import HameshShekel from "../../assets/images/hameshShekel_heads.svg";
 import EserShekel from "../../assets/images/eserShekel_heads.svg";
 import EmptyCoin from "../../assets/images/empty_coin.svg";
 import CharityBox from "../../assets/images/charity_box.png"
-import ManualAmountBar from './ManualAmountBar';
-
-const firstEntry = (
-    <div id='first-entry' className='container'>
-        <h1 className='entry-title'>קופת הצדקה הדיגיטלית שלך</h1>
-        <Link to="/Signup">
-            <Button>בואו נתחיל!</Button>
-        </Link>
-    </div>
-)
-
-
 
 export default function Home() {
     const snap = useSnapshot(state);
     const user = snap.user;
     const userName = user.personalInfo.firstName;
-    const [isConnected, setIsConnected] = useState(true); // Check if user logged-in.
+    const [isConnected, setIsConnected] = useState(false); // Check if user logged-in.
     const [displayCoins, setDisplayCoins] = useState([]);
     const [parent, setParent] = useState(null);
     const [child, setChild] = useState(null);
@@ -124,7 +113,7 @@ export default function Home() {
                         </DndContext>
                         <ManualAmountBar/>
                     </div>) :
-                    firstEntry
+                    <FirstEntry />
             }
         </div>
     )

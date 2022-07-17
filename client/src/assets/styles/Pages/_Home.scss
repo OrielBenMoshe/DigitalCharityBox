@@ -2,25 +2,35 @@
     height: 100%;
     text-align: center;
 
-    #first-entry {
-        // @include flex(flex-start, center, column);
+    #FirstEntry {
+        @include flex(flex-end, center, column);
         height: 100%;
         padding-block: 30px;
         position: relative;
+        padding-bottom: 72px;
 
         h1.entry-title {
+            position: absolute;
+            top: 24%;
             height: 100%;
             font-size: 45px;
-            margin-block: 50%;
+        }
+        .modal-link {
+            font-size: 18px;
+            margin-bottom: 20px;
         }
 
-        a button {
+        .ant-modal {
+            max-width: calc(100vw - 60px);
+        }
+
+        .signup-link button{
             height: 60px;
             width: 160px;
-            position: absolute;
-            bottom: 60px;
-            right: 50%;
-            transform: translateX(50%);
+            // position: absolute;
+            // bottom: 60px;
+            // right: 50%;
+            // transform: translateX(50%);
             font-size: 20px;
         }
 
