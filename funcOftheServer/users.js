@@ -35,7 +35,7 @@ exports.listUsers = async (req, res) => {
 exports.userConnected = async (req, res) => {
   const userId = req.params.id;
   const userConnected = await models.usersSchema.find({
-    uidFirebase: userId,
+    UIDfirebase: userId,
   });
   try {
     res.send(userConnected);
