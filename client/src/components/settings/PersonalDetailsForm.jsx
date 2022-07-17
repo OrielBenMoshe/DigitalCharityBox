@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Link } from "react-router-dom";
+import { PostToServer } from "../../getData";
 
 import { state } from '../../state';
 import { useSnapshot } from 'valtio';
@@ -8,21 +9,30 @@ import { useSnapshot } from 'valtio';
 import { Storage } from '@capacitor/storage';
 
 export default function PersonalDetailsForm(props) {
-    const [initialValues, setInitialValues] = useState({ ...state.user.personalInfo });
+    const [initialValues, setInitialValues] = useState({ ...state.user });
     const personalForm = useRef();
     const firstInput = useRef();
     const snap = useSnapshot(state);
     console.log("personalInfo:", snap.user);
+    console.log(initialValues);
 
     const savePersonalInfo = (values) => {
         // await Storage.set({ key: "personalInfo", value: JSON.stringify(values) })
-        state.user.personalInfo = { ...state.user.personalInfo, ...values };
+        // state.user.personalInfo = { ...state.user.personalInfo, ...values };
     }
+    console.log('Success:', state.user);
+
 
     const onFinish = (values) => {
+        console.log('Success:', values);
+        PostToServer(
+            "/api/addUser",
+             {...values, UIDfirebase: state.UIDfirebase}
+          );
         savePersonalInfo(values);
         // props.setVisible(false);
         props.formHandle({ response: "success" })
+
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -35,8 +45,9 @@ export default function PersonalDetailsForm(props) {
         props.formHandle(personalForm.current);
     }, [])
 
-    useEffect(() => {
-    }, [])
+    // useEffect(() => {
+    //     setInitialValues({ ...state.user.personalInfo });
+    // }, [state])
 
 
 
@@ -100,6 +111,7 @@ export default function PersonalDetailsForm(props) {
                 <Form.Item
                     label="דואר אלקטרוני"
                     name="email"
+
                 >
                     <Input />
                 </Form.Item>
