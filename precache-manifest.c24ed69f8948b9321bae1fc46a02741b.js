@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "55f1338ed0a8bd8b219a",
+    "revision": "d291a3c6326eedca7777",
     "url": "/DigitalCharityBox/static/css/main.199a6db8.chunk.css"
   },
   {
-    "revision": "55f1338ed0a8bd8b219a",
-    "url": "/DigitalCharityBox/static/js/main.80ba2a5a.chunk.js"
+    "revision": "d291a3c6326eedca7777",
+    "url": "/DigitalCharityBox/static/js/main.48791039.chunk.js"
   },
   {
     "revision": "5581b44c67e122e3ef53",
@@ -84,7 +84,7 @@ self.__precacheManifest = [
     "url": "/DigitalCharityBox/static/media/NotoSerifHebrew-Thin.b82c5a7c.ttf"
   },
   {
-    "revision": "f4ddf6c4571b02e38c487122d8bf20e7",
+    "revision": "96483cdcefe92eb60970a3520df051d4",
     "url": "/DigitalCharityBox/index.html"
   }
 ];
