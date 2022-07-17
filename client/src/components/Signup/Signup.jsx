@@ -67,6 +67,9 @@ export default function Signup() {
             </Steps>
             <div className="steps-content">{steps[current].content}</div>
             <div className="steps-action">
+                {current === 0 && (
+                    <Link to="/Home">→ חזרה</Link>
+                )}
                 {current > 0 && (
                     <Button
                         style={{
@@ -74,21 +77,22 @@ export default function Signup() {
                         }}
                         onClick={() => prev()}
                     >
-                        חזרה
+                        → חזרה
                     </Button>
                 )}
                 {current < steps.length - 1 && (
                     <Button type="primary" onClick={() => current == 0 ? submitForm() : next()} style={{ marginInline: "auto 0" }}>
-                        הבא
+                        הבא ←
                     </Button>
                 )}
                 {current === steps.length - 1 && (
-                    <Button type="primary" onClick={() => message.success('ההגדרות הראשוניות הושלמו בהצלחה, הקופה כבר מוכנה.')}>
-                        זהו, סיימנו!
-                    </Button>
+                    <Link to="/Home">
+                        <Button type="primary" onClick={() => message.success('ההגדרות הראשוניות הושלמו בהצלחה, הקופה כבר מוכנה.') }>
+                            זהו, סיימנו!
+                        </Button>
+                    </Link>
                 )}
             </div>
-            {/* <Outlet/> */}
         </div>
     )
 }

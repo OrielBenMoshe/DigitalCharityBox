@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">digital_charity_box</string>
+    <string name="title_activity_main">digital_charity_box</string>
+    <string name="package_name">com.benmoshe.digitalcharitybox</string>
+    <string name="custom_url_scheme">com.benmoshe.digitalcharitybox</string>
+</resources>

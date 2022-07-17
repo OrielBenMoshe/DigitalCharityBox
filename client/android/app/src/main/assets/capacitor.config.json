@@ -1,0 +1,6 @@
+{
+	"appId": "com.benmoshe.digitalcharitybox",
+	"appName": "digital_charity_box",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
