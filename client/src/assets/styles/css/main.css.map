@@ -12,6 +12,7 @@
         "../Components/_Steps.scss",
         "../Components/_SwitchItem.scss",
         "../Components/_Divider.scss",
+        "../Components/_ConnectWithGoogle.scss",
         "../Components/_Settings.scss",
         "../Pages/_Signup.scss",
         "../Pages/_Home.scss"

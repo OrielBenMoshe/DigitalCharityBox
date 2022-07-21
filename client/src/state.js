@@ -10,15 +10,17 @@ import { devtools } from "valtio/utils";
 // }
 // getSavedData('user');
 
+const UIDfirebase = "";
+console.log(UIDfirebase);
 const user = /* getSavedData() ? getSavedData() : */ {
   personalInfo: {
-    firstName: "אוריאל",
-    lastName: "בן משה",
-    phoneNumber: "0526053495",
-    password: "12346",
-    email: "oriel.bm.work@gmail.com",
-    city: "כוכב השחר",
-    address: "נוף הירדן 7",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    password: "",
+    email: "",
+    city: "",
+    address: "",
   },
   craditCardInfo: {
     token: "",
@@ -60,7 +62,7 @@ const user = /* getSavedData() ? getSavedData() : */ {
 // }
 // savePersonalInfo(user);
 
-const state = proxy({ user });
+const state = proxy({ user, UIDfirebase });
 const unsub = devtools(state, { name: "state name", enabled: true });
 
 export { state };

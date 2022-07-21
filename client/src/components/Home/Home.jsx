@@ -25,7 +25,7 @@ export default function Home() {
     const snap = useSnapshot(state);
     const user = snap.user;
     const userName = user.personalInfo.firstName;
-    const [isConnected, setIsConnected] = useState(false); // Check if user logged-in.
+    const [isConnected, setIsConnected] = useState(true); // Check if user logged-in.
     const [displayCoins, setDisplayCoins] = useState([]);
     const [parent, setParent] = useState(null);
     const [child, setChild] = useState(null);

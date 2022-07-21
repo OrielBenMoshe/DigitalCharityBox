@@ -14,7 +14,13 @@ import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import heIL from "antd/lib/locale/he_IL";
 
+
+
+import jQuery from 'jquery'; 
+
 require('dotenv').config();
+
+// console.log(process.env);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

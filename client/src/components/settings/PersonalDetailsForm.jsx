@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Link } from "react-router-dom";
+import { PostToServer } from "../../getData";
 
 import { state } from '../../state';
 import { useSnapshot } from 'valtio';
@@ -8,21 +9,30 @@ import { useSnapshot } from 'valtio';
 import { Storage } from '@capacitor/storage';
 
 export default function PersonalDetailsForm(props) {
-    const [initialValues, setInitialValues] = useState({ ...state.user.personalInfo });
+    const [initialValues, setInitialValues] = useState({ ...state.user });
     const personalForm = useRef();
     const firstInput = useRef();
     const snap = useSnapshot(state);
-    console.log("personalInfo:", snap.user);
+    // console.log("personalInfo:", snap.user);
+    // console.log(initialValues);
+    // console.log('Success:', state.user);
 
     const savePersonalInfo = (values) => {
         // await Storage.set({ key: "personalInfo", value: JSON.stringify(values) })
-        state.user.personalInfo = { ...state.user.personalInfo, ...values };
+        // state.user.personalInfo = { ...state.user.personalInfo, ...values };
     }
 
+
     const onFinish = (values) => {
+        console.log('Success:', values);
+        PostToServer(
+            "/api/addUser",
+             {...values, UIDfirebase: state.UIDfirebase}
+          );
         savePersonalInfo(values);
         // props.setVisible(false);
         props.formHandle({ response: "success" })
+
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -35,8 +45,9 @@ export default function PersonalDetailsForm(props) {
         props.formHandle(personalForm.current);
     }, [])
 
-    useEffect(() => {
-    }, [])
+    // useEffect(() => {
+    //     setInitialValues({ ...state.user.personalInfo });
+    // }, [state])
 
 
 
@@ -63,12 +74,12 @@ export default function PersonalDetailsForm(props) {
                 <Form.Item
                     label="שם פרטי"
                     name="firstName"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'לא אמרת מה השם שלך',
-                        },
-                    ]}
+                    // rules={[
+                    //     {
+                    //         required: true,
+                    //         message: 'לא אמרת מה השם שלך',
+                    //     },
+                    // ]}
                     initialValue={""}
                 >
                     <Input ref={firstInput} />
@@ -76,30 +87,31 @@ export default function PersonalDetailsForm(props) {
                 <Form.Item
                     label="שם משפחה"
                     name="lastName"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'לא אמרת מאיזו משפחה אתה',
-                        },
-                    ]}
+                    // rules={[
+                    //     {
+                    //         required: true,
+                    //         message: 'לא אמרת מאיזו משפחה אתה',
+                    //     },
+                    // ]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="מספר טלפון"
                     name="phoneNumber"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'מה מספר הטלפון שלך?',
-                        },
-                    ]}
+                    // rules={[
+                    //     {
+                    //         required: true,
+                    //         message: 'מה מספר הטלפון שלך?',
+                    //     },
+                    // ]}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     label="דואר אלקטרוני"
                     name="email"
+
                 >
                     <Input />
                 </Form.Item>

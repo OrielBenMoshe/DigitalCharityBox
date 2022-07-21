@@ -44,6 +44,9 @@ export default function Signup() {
             content: <PersonalDetailsForm ref={refForm} formHandle={formHandle} isSignup/>,
         },
         {
+            content: <CreditDetailsForm/>,
+        },
+        {
             content: <DisplaySettings/>,
         },
         {

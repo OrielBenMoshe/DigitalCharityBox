@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Modal, message, Checkbox, Form, Input } from 'antd';
+import ConnectWithGoogle from '../Signup/connectWithGoogle';
 
 
 export default function FirstEntry() {
@@ -31,6 +32,9 @@ export default function FirstEntry() {
     return (
         <div id='FirstEntry' className='container'>
             <h1 className='entry-title'>קופת הצדקה הדיגיטלית שלך</h1>
+
+<ConnectWithGoogle/>
+
             <Button type="link" className='modal-link' onClick={showModal} block> כבר נרשמתם אצלינו?  התחברו כאן </Button>
             <Modal title="כניסת רשומים" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form
