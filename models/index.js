@@ -8,6 +8,10 @@ function connectToDb() {
   });
 }
 
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB Connected!');
+});
+
 const models = { usersSchema };
 
 module.exports = { connectToDb, models };

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const UsersSchema = new mongoose.Schema({
-  UIDfirebase: String,
+  firebaseUID: String,
   personalInfo: {
     firstName: String,
     lastName: String,
@@ -16,15 +16,5 @@ const UsersSchema = new mongoose.Schema({
 });
 
 const Users = mongoose.model("Users", UsersSchema);
-
-const product1 = new Users({
-  personalInfo: {
-    firstName: "String",
-  },
-});
-
-// product1.save();
-// product2.save();
-// product3.save();
 
 module.exports = Users;

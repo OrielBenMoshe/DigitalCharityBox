@@ -3,7 +3,7 @@ const { models } = require("../models");
 exports.addUser = async (req, res) => {
   console.log("req.body", req.body);
   const newUser = new models.usersSchema({
-    UIDfirebase: req.body.UIDfirebase,
+    firebaseUID: req.body.firebaseUID,
     personalInfo: {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -35,7 +35,7 @@ exports.listUsers = async (req, res) => {
 exports.userConnected = async (req, res) => {
   const userId = req.params.id;
   const userConnected = await models.usersSchema.find({
-    UIDfirebase: userId,
+    firebaseUID: userId,
   });
   try {
     res.send(userConnected);
@@ -47,8 +47,8 @@ exports.userConnected = async (req, res) => {
 exports.editUser = async (req, res) => {
   const userId = req.params.id;
   let updateValues = { $set: {} };
-  if (req.body.uidFirebase)
-    updateValues.$set["uidFirebase"] = req.body.uidFirebase;
+  if (req.body.firebaseUID)
+    updateValues.$set["firebaseUID"] = req.body.firebaseUID;
 
   if (req.body.nameUser) updateValues.$set["nameUser"] = req.body.nameUser;
   if (req.body.mailUser) updateValues.$set["mailUser"] = req.body.mailUser;

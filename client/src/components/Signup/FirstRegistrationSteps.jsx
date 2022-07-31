@@ -2,18 +2,24 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, message, Steps } from 'antd';
 
 import { Routes, Route, Link, Outlet } from "react-router-dom";
+
+/** Components */
+import Register from './Register';
 import PersonalDetailsForm from '../settings/PersonalDetailsForm';
 import CreditDetailsForm from '../settings/CreditDetailsForm';
 import DisplaySettings from '../settings/DisplaySettings';
 import MemoSettings from '../settings/MemoSettings';
 
+import { useSearchParams } from "react-router-dom";
+import SignupWithFirebase from '../settings/SignupWithFirebase';
+
 // import useOnScreen from '../../hooks/useOnScreen';
 
 
-export default function Signup() {
+export default function FirstRegistrationSteps() {
+    let [searchParams, setSearchParams] = useSearchParams();
     const [current, setCurrent] = useState(0);
-    const [personalForm, setPersonalForm] = useState();
-    const refForm = useRef(null);
+    const [formRef, setFormRef] = useState();
     // const isVisible = useOnScreen(refForm);
     
     const next = () => {
@@ -25,33 +31,45 @@ export default function Signup() {
     };
     
     const submitForm = () => {
-        personalForm.submit();
+        formRef.submit();
     }
     
-    const formHandle = (ref) => {
-        if (!ref.response) {
-            setPersonalForm(ref)
-        } else {
-            ref.response === "success" && next();
-        }
+    const formRefForward = (ref) => {
+        setFormRef(ref)
+        // if (!ref.response) {
+        // } else {
+        //     ref.response === "success" && next();
+        // }
     }
-    
 
+    const handleNextBtn = () => {
+        if (formRef) {
+            formRef.submit();
+        } 
+        next();
+    }
+    
+    /**  צריך לטפל בשני טפסים עם רפרנסים, בעת לחיצה על הבא הטופס נשלח */
 
     const steps = [
         {
-            /** Keep this component first in the array to match the submission of the personal details form by clicking the "Next" button. */
-            content: <PersonalDetailsForm ref={refForm} formHandle={formHandle} isSignup/>,
+            content: <Register />,
+        },
+        // {
+        //     content: <SignupWithFirebase formRefForward={formRefForward}/>,
+        // },
+        {
+            content: <PersonalDetailsForm formRefForward={formRefForward} isSignup/>,
         },
         {
             content: <CreditDetailsForm/>,
         },
-        {
-            content: <DisplaySettings/>,
-        },
-        {
-            content: <MemoSettings/>,
-        },
+        // {
+        //     content: <MemoSettings/>,
+        // },
+        // {
+        //     content: <DisplaySettings/>,
+        // },
     ];
     const { Step } = Steps;
     
@@ -59,9 +77,13 @@ export default function Signup() {
     //     console.log("isVisible:", isVisible);
     // }, [isVisible])
 
+    useEffect(() => {
+        searchParams.get("token") && setCurrent(2);
+    }, []);
+
 
     return (
-        <div className='Signup' >
+        <div className='FirstRegistrationSteps' >
             <Steps current={current} size="small" direction="horizontal" responsive={false}>
                 {steps.map((item, key) => {
                     
@@ -84,7 +106,7 @@ export default function Signup() {
                     </Button>
                 )}
                 {current < steps.length - 1 && (
-                    <Button type="primary" onClick={() => current == 0 ? submitForm() : next()} style={{ marginInline: "auto 0" }}>
+                    <Button type="primary" onClick={handleNextBtn} style={{ marginInline: "auto 0" }}>
                         הבא ←
                     </Button>
                 )}

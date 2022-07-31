@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { Button, Modal, message, Checkbox, Form, Input } from 'antd';
-import ConnectWithGoogle from '../Signup/connectWithGoogle';
-
+import Login from "../Login/Login";
 
 export default function FirstEntry() {
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const refLoginForm = useRef(null);
+    // const refLoginForm = useRef(null);
 
     const showModal = () => {
         setIsModalVisible(true);
     };
 
     const handleOk = () => {
-        refLoginForm.current.submit();
+        // refLoginForm.current.submit();
         // setIsModalVisible(false);
     };
 
@@ -21,23 +20,21 @@ export default function FirstEntry() {
         setIsModalVisible(false);
     };
 
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    // const onFinish = (values) => {
+    //     console.log('Success:', values);
+    // };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = (errorInfo) => {
+    //     console.log('Failed:', errorInfo);
+    // };
 
     return (
         <div id='FirstEntry' className='container'>
             <h1 className='entry-title'>קופת הצדקה הדיגיטלית שלך</h1>
 
-<ConnectWithGoogle/>
-
             <Button type="link" className='modal-link' onClick={showModal} block> כבר נרשמתם אצלינו?  התחברו כאן </Button>
             <Modal title="כניסת רשומים" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <Form
+                {/* <Form
                     ref={refLoginForm}
                     name="basic"
                     layout="vertical"
@@ -74,6 +71,8 @@ export default function FirstEntry() {
                         <Checkbox>זכור אותי</Checkbox>
                     </Form.Item>
                 </Form>
+                <ConnectWithGoogle /> */}
+                <Login />
             </Modal>
             <Link to="/Signup" className='signup-link'>
                 <Button>בואו נתחיל!</Button>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, createRef } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Link } from "react-router-dom";
 import { PostToServer } from "../../getData";
@@ -10,12 +10,9 @@ import { Storage } from '@capacitor/storage';
 
 export default function PersonalDetailsForm(props) {
     const [initialValues, setInitialValues] = useState({ ...state.user });
-    const personalForm = useRef();
-    const firstInput = useRef();
+    const formRef = createRef();
+    const firstInputRef = useRef();
     const snap = useSnapshot(state);
-    // console.log("personalInfo:", snap.user);
-    // console.log(initialValues);
-    // console.log('Success:', state.user);
 
     const savePersonalInfo = (values) => {
         // await Storage.set({ key: "personalInfo", value: JSON.stringify(values) })
@@ -25,24 +22,24 @@ export default function PersonalDetailsForm(props) {
 
     const onFinish = (values) => {
         console.log('Success:', values);
-        PostToServer(
-            "/api/addUser",
-             {...values, UIDfirebase: state.UIDfirebase}
-          );
-        savePersonalInfo(values);
+        // PostToServer(
+        //     "/api/addUser",
+        //      {...values, firebaseUID: state.firebaseUID}
+        //   );
+        // savePersonalInfo(values);
         // props.setVisible(false);
-        props.formHandle({ response: "success" })
+        // props.formRefForward({ response: "success" })
 
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
-        props.formHandle({ response: "failed" })
+        // props.formRefForward({ response: "failed" })
     };
 
     useEffect(() => {
-        firstInput.current.focus();
-        props.formHandle(personalForm.current);
+        firstInputRef.current.focus();
+        props.formRefForward(formRef.current);
     }, [])
 
     // useEffect(() => {
@@ -60,15 +57,14 @@ export default function PersonalDetailsForm(props) {
             <Form
                 className='content'
                 name="basic"
+                ref={formRef}
                 layout="vertical"
                 initialValues={{
                     remember: true,
-                    ...initialValues
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="on"
-                ref={personalForm}
                 scrollToFirstError
             >
                 <Form.Item
@@ -82,7 +78,7 @@ export default function PersonalDetailsForm(props) {
                     // ]}
                     initialValue={""}
                 >
-                    <Input ref={firstInput} />
+                    <Input ref={firstInputRef} />
                 </Form.Item>
                 <Form.Item
                     label="שם משפחה"
@@ -108,13 +104,13 @@ export default function PersonalDetailsForm(props) {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                     label="דואר אלקטרוני"
                     name="email"
 
                 >
                     <Input />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                 >
                     <Form.Item

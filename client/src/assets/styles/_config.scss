@@ -48,3 +48,12 @@ body {
     }
 
 }
+iframe {
+    border: 0;
+}
+html, body {
+    overflow: hidden !important;
+}
+input#CardNumber {
+    background: aquamarine;
+}

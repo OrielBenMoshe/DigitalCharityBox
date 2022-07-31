@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, InputNumber } from 'antd'
 
-import { state } from '../../state';
+import { state } from '../../../state';
 
 export default function ManualAmountBar() {
     const amountRef = useRef(null);

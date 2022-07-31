@@ -16,8 +16,9 @@ const ConnectWithGoogle = () => {
     signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
+      console.log("signIn result:", result);
       const user = result.user;
-      state.UIDfirebase = user.uid  ;
+      state.firebaseUID = user.uid  ;
       })
       .catch((error) => {
         const errorCode = error.code;

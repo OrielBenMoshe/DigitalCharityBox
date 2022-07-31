@@ -1,9 +1,17 @@
 const cors = require("cors");
 const express = require("express");
+const router = require('express').Router(); 
 const app = express();
+const mongoose = require("mongoose");
+
 const path = require("path");
 const { connectToDb, models } = require("./models");
-const users = require("./funcOftheServer/users");
+const users = require("./controllers/users");
+const { 
+  getGateway,
+  setCustomer
+} = require("./controllers/sumit");
+
 
 app.use(cors());
 app.use(express.json());
@@ -16,12 +24,15 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 const PORT = process.env.PORT || 7000;
 
+/** Connect to Mongo */
 connectToDb().then(async () => {
   app.listen(PORT, () => {
-    console.log("Server is running port ", PORT);
+    console.log("Server is running port", PORT);
   });
+ 
 });
 
+/** Heroku Routes */
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
@@ -32,7 +43,38 @@ app.get("/Home", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
+/** End Points for MongoDB */
 app.post("/api/addUser/", users.addUser);
 app.get("/api/listUsers/", users.listUsers);
 app.post("/api/userConnected/:id", users.userConnected);
 app.put("/api/editUser/:id", users.editUser);
+
+/** End Point to Sumit */
+app.get("/api/sumit/getGateway", getGateway);
+app.get("/api/sumit/setCustomer", setCustomer);
+
+// app.post("/sumit/setCustomer", (res, req) => {
+
+//   // {
+//   //   "Credentials": {
+//   //     "CompanyID": 0,
+//   //     "APIKey": "string"
+//   //   },
+//   //   "Customer": {
+//   //     "Name": "string",
+//   //     "Phone": "string",
+//   //     "EmailAddress": "string",
+//   //     "SearchMode": "Automatic"
+//   //   },
+//   //   "PaymentMethod": {
+//   //     "CreditCard_ExpirationMonth": 12,
+//   //     "CreditCard_ExpirationYear": 0,
+//   //     "CreditCard_CitizenID": "string",
+//   //     "CreditCard_Token": "string",
+//   //     "Type": "CreditCard"
+//   //   }  
+
+//   console.log("req.body:", req.body);
+//   app.post('https://www.myofficeguy.com/api/billing/paymentmethods/setforcustomer', )
+  
+// });

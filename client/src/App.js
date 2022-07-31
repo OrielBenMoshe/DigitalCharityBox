@@ -2,55 +2,79 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import "./assets/styles/css/main.css";
 import { Routes, Route } from "react-router-dom";
-import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+// /** Firebase */
+// import { initializeApp } from "firebase/app";
+// import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+/** Valtio */
 import { state } from "./state";
+import { proxy, useSnapshot, subscribe } from "valtio";
+
 import { PostToServer } from "./getData";
 
 import Home from "./components/Home/Home";
-import Signup from "./components/Signup/Signup";
+import FirstRegistrationSteps from "./components/Signup/FirstRegistrationSteps";
 import PersonalDetailsForm from "./components/settings/PersonalDetailsForm";
 import DisplaySettings from "./components/settings/DisplaySettings";
 import CreditDetailsForm from "./components/settings/CreditDetailsForm";
 
-function App() {
-  const [detailsUsers, setDetailsUsers] = useState([]);
+import setLocalStorage from "./setLocalStorage";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDL8T1pMf6ZE6ZsByagJH8KD52lMSwIP2E",
-    authDomain: "charityboxapp-f8611.firebaseapp.com",
-    projectId: "charityboxapp-f8611",
-    storageBucket: "charityboxapp-f8611.appspot.com",
-    messagingSenderId: "60324429990",
-    appId: "1:60324429990:web:aabdf959678fb0181af467",
-    measurementId: "G-HETM9JKNL8",
+function App() {
+  // const [detailsUsers, setDetailsUsers] = useState([]);
+  const snap = useSnapshot(state);
+  // const firebaseConfig = {
+  //   apiKey: "AIzaSyDL8T1pMf6ZE6ZsByagJH8KD52lMSwIP2E",
+  //   authDomain: "charityboxapp-f8611.firebaseapp.com",
+  //   projectId: "charityboxapp-f8611",
+  //   storageBucket: "charityboxapp-f8611.appspot.com",
+  //   messagingSenderId: "60324429990",
+  //   appId: "1:60324429990:web:aabdf959678fb0181af467",
+  //   measurementId: "G-HETM9JKNL8",
+  // };
+
+  /** Insert the LocalStorage to the global state. */
+  const initializeState = async () => {
+    try {
+      state.user = await setLocalStorage();
+    } catch (error) {
+      console.log("error:", error);
+    }
   };
 
-  initializeApp(firebaseConfig);
-  const auth = getAuth();
   // state.user = detailsUsers[0];
-  console.log(detailsUsers);
+  // useEffect(() => {
+  //   console.log("detailsUsers:", detailsUsers);
+    
+  //   // state.user = setLocalStorage("firebaseUID", detailsUsers[0])
+  // }, [detailsUsers])
 
   useEffect(() => {
-    onAuthStateChanged(auth, (userForFirebase) => {
-      if (userForFirebase) {
-        state.UIDfirebase = userForFirebase.uid;
-        PostToServer(
-          `/api/userConnected/${userForFirebase.uid}`,
-          {},
-          setDetailsUsers
-        );
-      }
-    });
-  }, [auth]);
+    initializeState();
+    // initializeApp(firebaseConfig);
+
+    // const auth = getAuth();
+    // onAuthStateChanged(auth, (userForFirebase) => {
+    //   if (userForFirebase) {
+    //     console.log("userForFirebase:", userForFirebase);
+    //     state.user.firebaseUID = userForFirebase.uid;
+    //     PostToServer(
+    //       `/api/userConnected/${userForFirebase.uid}`,
+    //       {},
+    //       setDetailsUsers
+    //     );
+    //   }
+    // });
+  }, []);
 
   return (
     <div className="App">
-      <Routes>
-        <Route path="/Signup" element={<Signup />} />
-        <Route index element={<Home />} />
-        <Route path="/Home" element={<Home />} />
-      </Routes>
+        <Routes>
+          <Route path="/Signup" element={<FirstRegistrationSteps />} />
+          <Route index element={<Home store={state} />} />
+          <Route path="/Home" element={<Home store={state} />} />
+        </Routes>
     </div>
   );
 }

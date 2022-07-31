@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export const GetData = async (url, data) => {
-  axios.get(url).then(
+const baseURL = process.env.REACT_APP_SERVER_URL;
+
+/** Get two parameters: 
+ * path - to endpoint, and 
+ * setState - to load data into it 
+ * */
+export const GetData = async (path, setState) => {
+  axios.get(baseURL+path).then(
     (res) => {
-      data(res.data);
+      setState(res.data);
     },
     (err) => {
       console.log(err);
+      setState(err);
     }
   );
 };
 
-export const PostToServer = async (url, obj, data, response) => {
-  axios.post(url, obj).then(
+export const PostToServer = async (path, obj, data, response) => {
+  axios.post(baseURL+path, obj).then(
     (res) => {
       if (data) {
         data(res.data);
@@ -29,7 +36,7 @@ export const PostToServer = async (url, obj, data, response) => {
 };
 
 export const PutToServer = async (route, obj, response) => {
-  axios.put(route, obj).then(
+  axios.put(baseURL+route, obj).then(
     (res) => {
       console.log(res);
       if (response) {
