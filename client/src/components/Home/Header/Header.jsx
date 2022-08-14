@@ -11,8 +11,8 @@ import { useSnapshot, subscribe } from 'valtio';
 
 function Header() {
     const { user } = useSnapshot(state);
-    const userName = `${user.personalInfo.firstName} ${user.personalInfo.lastName}`;
-    const phoneNumber = user.personalInfo.phoneNumber;
+    // const userName = `${user.personalInfo.firstName} ${user.personalInfo.lastName}`;
+    // const phoneNumber = user.personalInfo.phoneNumber;
     const [visible, setVisible] = useState(false);
 
     const showMenu = () => {

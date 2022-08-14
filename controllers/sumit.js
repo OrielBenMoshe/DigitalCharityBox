@@ -16,7 +16,6 @@ module.exports = {
     await axios
       .post(url, bodyRequest)
       .then((response) => {
-        console.log(response.data.Data);
         res.status(200).json(response.data.Data);
       })
       .catch((error) => {
@@ -26,7 +25,23 @@ module.exports = {
         });
       });
   },
+  getOfficeGuy: async (req, res) => {
+    const url = "https://app.sumit.co.il/scripts/payments.js";
+    await axios
+    .get(url)
+    .then((response) => {
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      console.log("error:", error);
+      res.status(500).json({
+        error,
+      });
+    });
+  },
   setCustomer: async (req, res) => {
+    // console.log("req:", req.body);
+    const customer = req.body;
     const url = `${baseURL}/billing/paymentmethods/setforcustomer`;
     const bodyRequest = {
       Credentials: {
@@ -34,24 +49,26 @@ module.exports = {
         APIKey: process.env.API_KEY,
       },
       Customer: {
-        Name: "string",
-        Phone: "string",
-        EmailAddress: "string",
+        Name: customer.displayName,
+        Phone: customer.phoneNumber,
+        EmailAddress: customer.email,
         SearchMode: "Automatic",
       },
-      PaymentMethod: {
-        CreditCard_ExpirationMonth: 12,
-        CreditCard_ExpirationYear: 0,
-        CreditCard_CitizenID: "string",
-        CreditCard_Token: "string",
-        Type: "CreditCard",
-      },
+      SingleUseToken: customer.token,
     };
     await axios
       .post(url, bodyRequest)
-      .then((response) => {
-        console.log(response.data.Data);
-        res.status(200).json(response.data.Data);
+      .then(({data}) => {
+        // console.log(data.Data);
+        if (data.Data.CustomerID) {
+          const customer = {
+            customerId: data.Data.CustomerID,
+            lastDigits: data.Data.PaymentMethod.CreditCard_LastDigits,
+            expirationMonth: data.Data.PaymentMethod.CreditCard_ExpirationMonth,
+            expirationYear: data.Data.PaymentMethod.CreditCard_ExpirationYear,
+          }
+          res.status(200).json(customer);
+        } else res.status(200).json(data.Data);
       })
       .catch((error) => {
         console.log("error:", error);

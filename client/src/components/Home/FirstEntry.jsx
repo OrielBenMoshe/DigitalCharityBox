@@ -34,44 +34,6 @@ export default function FirstEntry() {
 
             <Button type="link" className='modal-link' onClick={showModal} block> כבר נרשמתם אצלינו?  התחברו כאן </Button>
             <Modal title="כניסת רשומים" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                {/* <Form
-                    ref={refLoginForm}
-                    name="basic"
-                    layout="vertical"
-                    initialValues={{
-                        remember: true,
-                    }}
-                    onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="on"
-                >
-                    <Form.Item label="שם משתמש" name="username"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'בבקשה הכנס את שם המשתמש שלך!',
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item label="סיסמה" name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'בבקשה הכנס את הסיסמה שלך!',
-                            },
-                        ]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
-
-                    <Form.Item name="remember" valuePropName="checked">
-                        <Checkbox>זכור אותי</Checkbox>
-                    </Form.Item>
-                </Form>
-                <ConnectWithGoogle /> */}
                 <Login />
             </Modal>
             <Link to="/Signup" className='signup-link'>

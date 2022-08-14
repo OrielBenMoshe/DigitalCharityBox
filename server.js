@@ -1,17 +1,18 @@
 const cors = require("cors");
 const express = require("express");
-const router = require('express').Router(); 
+const router = require("express").Router();
 const app = express();
 const mongoose = require("mongoose");
 
 const path = require("path");
 const { connectToDb, models } = require("./models");
-const users = require("./controllers/users");
-const { 
-  getGateway,
-  setCustomer
-} = require("./controllers/sumit");
-
+const {
+  addUser,
+  listUsers,
+  findUser,
+  updateUser
+} = require("./controllers/users");
+const { getGateway, setCustomer, getOfficeGuy } = require("./controllers/sumit");
 
 app.use(cors());
 app.use(express.json());
@@ -29,7 +30,6 @@ connectToDb().then(async () => {
   app.listen(PORT, () => {
     console.log("Server is running port", PORT);
   });
- 
 });
 
 /** Heroku Routes */
@@ -44,14 +44,15 @@ app.get("/Home", (req, res) => {
 });
 
 /** End Points for MongoDB */
-app.post("/api/addUser/", users.addUser);
-app.get("/api/listUsers/", users.listUsers);
-app.post("/api/userConnected/:id", users.userConnected);
-app.put("/api/editUser/:id", users.editUser);
+app.post("/api/addUser/", addUser);
+app.get("/api/listUsers/", listUsers);
+app.get("/api/findUser/:id", findUser);
+app.put("/api/updateUser/:id", updateUser);
 
 /** End Point to Sumit */
 app.get("/api/sumit/getGateway", getGateway);
-app.get("/api/sumit/setCustomer", setCustomer);
+app.get("/api/sumit/getOfficeGuy", getOfficeGuy);
+app.post("/api/sumit/setCustomer", setCustomer);
 
 // app.post("/sumit/setCustomer", (res, req) => {
 
@@ -72,9 +73,9 @@ app.get("/api/sumit/setCustomer", setCustomer);
 //   //     "CreditCard_CitizenID": "string",
 //   //     "CreditCard_Token": "string",
 //   //     "Type": "CreditCard"
-//   //   }  
+//   //   }
 
 //   console.log("req.body:", req.body);
 //   app.post('https://www.myofficeguy.com/api/billing/paymentmethods/setforcustomer', )
-  
+
 // });

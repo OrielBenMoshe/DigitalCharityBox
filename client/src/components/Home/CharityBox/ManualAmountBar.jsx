@@ -1,25 +1,42 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Button, InputNumber } from 'antd'
 
-import { state } from '../../../state';
+import setLocalStorage from '../../../setLocalStorage';
+import { UpdateData } from '../../../serverRequests';
 
-export default function ManualAmountBar() {
+export default function ManualAmountBar({ store, user }) {
     const amountRef = useRef(null);
     const [value, setValue] = useState();
+    const [response, setResponse] = useState()
+
+    const updateTotalAmount = (value) => {
+        const id = user._id;
+        const where = "totalAmount";
+        const updatedValue = user.totalAmount + value;
+        console.log("value to donate:", value);
+        UpdateData(`/api/updateUser/${id}`, { where, value: updatedValue }, setResponse);
+    }
 
     const handleClick = () => {
-        let menualAmount = Number(amountRef.current.value);
-        if (menualAmount) {
-            console.log('amountRef:', menualAmount);
-            state.user.totalAmount += menualAmount;
+        let manualAmount = Number(amountRef.current.value);
+        if (manualAmount) {
+            updateTotalAmount(manualAmount)
             setValue(0);
         }
     };
 
     const onChange = (input) => {
-        console.log('changed', input);
-        setValue(input)
+        setValue(input);
     };
+
+    useEffect(() => {
+        if (response && store) {
+            setLocalStorage("user", response.user)
+                .then((user) => {
+                    store.user = user;
+                })
+        }
+    }, [response])
 
     return (
         <div id="ManualAmountBar">

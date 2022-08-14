@@ -2,11 +2,14 @@ import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider,
   getAuth,
+  deleteUser,
+  EmailAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -31,21 +34,50 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const deleteCurrentUser = async () => {
+  try {
+    const res = await auth.currentUser.delete;
+    console.log("res:", res);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const deleteSignedUser = async (password) => {
+  const credential = EmailAuthProvider.credential(
+    auth.currentUser.email,
+    password
+  )
+
+  const result = await reauthenticateWithCredential(
+    auth.currentUser,
+    credential
+  )
+
+  // Pass result.user here
+  await deleteUser(result.user)
+ 
+  console.log("success in deleting")
+  localStorage.removeItem("user");
+}
 
 const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      const res = await signInWithPopup(auth, GoogleAuthProvider);
+      const res = await signInWithPopup(auth, provider);
       const user = res.user;
-      const q = query(collection(db, "users"), where("uid", "==", user.uid));
-      const docs = await getDocs(q);
-      if (docs.docs.length === 0) {
-        await addDoc(collection(db, "users"), {
-          uid: user.uid,
-          name: user.displayName,
-          authProvider: "google",
-          email: user.email,
-        });
-      }
+      return user;
+    //   const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    //   const docs = await getDocs(q);
+    //   if (docs.docs.length === 0) {
+    //     await addDoc(collection(db, "users"), {
+    //       uid: user.uid,
+    //       name: user.displayName,
+    //       authProvider: "google",
+    //       email: user.email,
+    //     });
+    //   }
+
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -55,26 +87,29 @@ const signInWithGoogle = async () => {
   const logInWithEmailAndPassword = async (email, password) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("user:", userCredential.user);
+      console.log("userCredential:", userCredential);
     } catch (err) {
       console.error(err);
       alert(err.message);
     }
   };
 
-  const registerWithEmailAndPassword = async (name, email, password) => {
+  const registerWithEmailAndPassword = async (email, password) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
-      await addDoc(collection(db, "users"), {
-        uid: user.uid,
-        name,
-        authProvider: "local",
-        email,
-      });
+      console.log("registerUser:", user);
+      return res;
+    //   await addDoc(collection(db, "users"), {
+    //     uid: user.uid,
+    //     name,
+    //     authProvider: "local",
+    //     email,
+    //   });
     } catch (err) {
       console.error(err);
       alert(err.message);
+      return err.message;
     }
   };
 
@@ -95,6 +130,8 @@ const signInWithGoogle = async () => {
   export {
     auth,
     db,
+    deleteCurrentUser,
+    deleteSignedUser,
     signInWithGoogle,
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,

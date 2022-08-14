@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { Spin } from 'antd';
 /** Dragg & Dropp */
 import { DndContext } from '@dnd-kit/core';
 import { Draggable } from '../../Draggable';
 import { Droppable } from '../../Droppable';
-
-/** Global State */
-import { useSnapshot, subscribe } from 'valtio';
 
 /** Components */
 import Header from '../Header/Header';
@@ -18,12 +15,11 @@ import Shnekel from "../../../assets/images/shnekel_heads.svg";
 import HameshShekel from "../../../assets/images/hameshShekel_heads.svg";
 import EserShekel from "../../../assets/images/eserShekel_heads.svg";
 import EmptyCoin from "../../../assets/images/empty_coin.svg";
-import CharityBoxImage from "../../../assets/images/charity_box.png";
+import CharityBoxImage from "../../../assets/images/charity_box.svg";
 
 
-export default function CharityBox({store, user}) {
-    const userName = user.personalInfo && user.personalInfo.firstName;
-    const [isConnected, setIsConnected] = useState(false); // Check if user logged-in.
+export default function CharityBox({ store, user }) {
+    const userName = user && user.personalInfo && user.personalInfo.fullName;
     const [displayCoins, setDisplayCoins] = useState();
     const [parent, setParent] = useState(null);
     const [child, setChild] = useState(null);
@@ -66,7 +62,7 @@ export default function CharityBox({store, user}) {
     const handleDragEnd = (event) => {
         const { over } = event;
 
-        // If the item is dropped over a container, set it as the parent
+        // If the item is dropped over a container, set it as the parent.
         // otherwise reset the parent to `null`
         setParent(over ? over.id : null);
         setChild(over ? { id: event.active.id } : null);
@@ -76,35 +72,42 @@ export default function CharityBox({store, user}) {
         }, 800);
     }
 
-    // useEffect(() => {
-    //     setDisplayCoins(createCoinElements(user.display.coins));
-    // }, [user.display.coins]);
+    useEffect(() => {
+        user && user.display && setDisplayCoins(createCoinElements(user.display.coins));
+    }, [user]);
 
     return (
         <div id='front-app'>
             <Header />
-            <DndContext onDragEnd={handleDragEnd}>
-                <h2>{`שלום ${userName && userName}! טוב לראותך`}</h2>
-                <Droppable id="charityBox" className="charity-box">
-                    <div className="coins-wrapper">
-                        {parent === "charityBox"
-                            && displayCoins.find(coin => coin.props.id === child.id)}
-                    </div>
-                    <img className='charity-box-image' src={CharityBoxImage} alt="" />
-                </Droppable>
-                <div className="container">
-                    <div className="sum-wrapper">
-                        <div>הסכום שהצטבר בקופה:</div>
-                        <h2 className="sum"><span>₪</span>{user.totalAmount || 0}</h2>
-                    </div>
-                    <div className="coins-wrapper">
-                        {child
-                            ? (displayCoins.filter(coin => (child && coin.props) && coin.props.id !== child.id))
-                            : displayCoins}
-                    </div>
-                </div>
-            </DndContext>
-            <ManualAmountBar />
+            {user 
+                ? (<>
+                    <DndContext onDragEnd={handleDragEnd}>
+                        <h2>{`שלום ${userName && userName}, טוב לראותך!`}</h2>
+                        <Droppable id="charityBox" className="charity-box">
+                            <div className="coins-wrapper">
+                                {parent === "charityBox"
+                                    && displayCoins.find(coin => {
+                                            return coin && coin.props.id === child.id
+                                        })}
+                            </div>
+                            <img className='charity-box-image' src={CharityBoxImage} alt="" />
+                        </Droppable>
+                        <div className="container">
+                            <div className="sum-wrapper">
+                                <div>הסכום שהצטבר בקופה:</div>
+                                <h2 className="sum"><span>₪</span>{user.totalAmount && user.totalAmount || 0}</h2>
+                            </div>
+                            <div className="coins-wrapper">
+                                {child
+                                    ? (displayCoins.filter(coin => (child && coin.props) && coin.props.id !== child.id))
+                                    : displayCoins}
+                            </div>
+                        </div>
+                    </DndContext>
+                    <ManualAmountBar store={store} user={user} />
+                </>)
+                : <Spin tip="בטעינה..." size='large'/>
+            }
         </div>
     )
 }

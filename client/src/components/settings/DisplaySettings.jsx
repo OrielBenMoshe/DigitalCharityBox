@@ -1,9 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
-
-/** Global State */
-import { state } from '../../state';
-import { useSnapshot, subscribe } from 'valtio';
 
 
 // import EserAgurot from "../../assets/images/eserAgurot_tails.svg";
@@ -17,9 +13,31 @@ import empty_coin from "../../assets/images/empty_coin.svg";
 import SwitchItem from './SwitchItem';
 
 
-export default function DisplaySettingsForm({onClose}) {
-    const snap = useSnapshot(state);
-    const coinsData = snap.user.display.coins;
+export default function DisplaySettingsForm({ onClose, display }) {
+    const [update, setUpdate] = useState();
+    const [coinsData, setCoinsData] = useState(display.coins);
+
+    /** Changes the state according to the user's changes  */
+    useEffect(() => {
+        if (update) {
+
+            // console.log("updaated:", update);
+            // console.log("coinsData:", coinsData);
+            const updatedCoinsData = [...coinsData];
+            const coinIndex = coinsData.findIndex(coin => coin._id === update._id);
+            updatedCoinsData[coinIndex] = {
+                ...coinsData[coinIndex],
+                active: update.active,
+                value: update.value,
+            }
+            setCoinsData(updatedCoinsData);
+        }
+    }, [update])
+
+    const sendUpdates = () => {
+        onClose(coinsData);
+    }
+
 
     const valueToLabel = (value) => {
         switch (value) {
@@ -54,30 +72,31 @@ export default function DisplaySettingsForm({onClose}) {
         <div className="settings DisplaySettingsForm">
             <div className='headers'>
                 <h1>הגדרות לתצוגה</h1>
-                <h3>אלו מטבעות להציג באפליקציה בלי לבזבז זמן מיותר?</h3>
+                <h3>אלו מטבעות תרצה להציג באפליקציה?</h3>
             </div>
             <div className="content coins-list">
                 {coinsData.map((coin, key) => {
                     return (
                         <SwitchItem
                             key={key}
+                            coinId={coin._id}
                             type="coin"
                             label={valueToLabel(coin.value)}
                             value={coin.value}
                             image={valueToImage(coin.value)}
                             defaultChecked={coin.active}
                             manual={coin.manual}
+                            setUpdate={setUpdate}
                         />
                     );
                 })}
             </div>
-            { onClose && 
-                <div className="footer" style={{ textAlign: "center", marginTop: "42px" }}>
-                    <Button type="primary" onClick={onClose} size='large'>
-                        סגור
-                    </Button>
-                </div> 
-            }
+            <div className="footer" style={{ textAlign: "center", marginBottom: "42px" }}>
+                <Button type="primary" onClick={sendUpdates} size='large'>
+                    שמור
+                </Button>
+            </div>
+
         </div>
     )
 }

@@ -1,83 +1,95 @@
 const { models } = require("../models");
 
-exports.addUser = async (req, res) => {
-  console.log("req.body", req.body);
-  const newUser = new models.usersSchema({
-    firebaseUID: req.body.firebaseUID,
-    personalInfo: {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      phoneNumber: req.body.phoneNumber,
-      password: req.body.password,
-      email: req.body.email,
-      city: req.body.city,
-      address: req.body.address,
-    },
-  });
-  try {
-    await newUser.save();
-    res.send(newUser);
-    console.log("addnewUser");
-  } catch (err) {
-    res.status(500).send(err);
-  }
-};
+module.exports = {
+  addUser: async (req, res) => {
+    // console.log("req.body", req.body);
+    const newUser = new models.usersSchema({
+      firebaseUID: req.body.firebaseUID,
+      costumerInfo: {
+        id: req.body.customerId,
+        lastDigits: req.body.lastDigits,
+        expirationMonth: req.body.expirationMonth,
+        expirationYear: req.body.expirationYear,
+      },
+      personalInfo: {
+        fullName: req.body.displayName,
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber,
+        password: req.body.password,
+        email: req.body.email,
+        city: req.body.city,
+        address: req.body.address,
+      },
+      display: {
+        coins: [
+          { value: 1, active: true },
+          { value: 2, active: true },
+          { value: 5, active: true },
+          { value: 10, active: true },
+          { value: 18, active: false, manual: true },
+        ],
+      },
+      reminders: [
+        { label: "בשחרית", time: "8:15", active: false },
+        { label: "במנחה", time: "18:05", active: false },
+        { label: "בזמן אחר", time: "11:00", active: false },
+      ]
+    });
+    try {
+      await newUser.save();
+      res.send(newUser);
+      console.log("New User Added to DB!");
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+  },
 
-exports.listUsers = async (req, res) => {
-  const listUsers = await models.usersSchema.find();
-  try {
-    res.send(listUsers);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-};
+  listUsers: async (req, res) => {
+    const listUsers = await models.usersSchema.find();
+    try {
+      res.send(listUsers);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
 
-exports.userConnected = async (req, res) => {
-  const userId = req.params.id;
-  const userConnected = await models.usersSchema.find({
-    firebaseUID: userId,
-  });
-  try {
-    res.send(userConnected);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-};
+  findUser: async (req, res) => {
+    const userId = req.params.id;
+    const findUser = await models.usersSchema.findOne({
+      firebaseUID: userId,
+    });
+    try {
+      res.send(findUser);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  },
 
-exports.editUser = async (req, res) => {
-  const userId = req.params.id;
-  let updateValues = { $set: {} };
-  if (req.body.firebaseUID)
-    updateValues.$set["firebaseUID"] = req.body.firebaseUID;
-
-  if (req.body.nameUser) updateValues.$set["nameUser"] = req.body.nameUser;
-  if (req.body.mailUser) updateValues.$set["mailUser"] = req.body.mailUser;
-  if (req.body.phoneUser) updateValues.$set["phoneUser"] = req.body.phoneUser;
-
-  if (req.body.receivingMessages)
-    updateValues.$set["receivingMessages"] = req.body.receivingMessages;
-  else updateValues.$set["receivingMessages"] = false;
-  if (req.body.receivingWTS)
-    updateValues.$set["receivingWTS"] = req.body.receivingWTS;
-  else updateValues.$set["receivingWTS"] = false;
-
-  if (req.body.msgSearchApartment)
-    updateValues.$set["msgSearchApartment"] = req.body.msgSearchApartment;
-  else updateValues.$set["msgSearchApartment"] = false;
-  if (req.body.areaSearchApartment)
-    updateValues.$set["areaSearchApartment"] = req.body.areaSearchApartment;
-  else updateValues.$set["areaSearchApartment"] = "";
-  if (req.body.msgSaleApartment)
-    updateValues.$set["msgSaleApartment"] = req.body.msgSaleApartment;
-  else updateValues.$set["msgSaleApartment"] = false;
-  if (req.body.areaSaleApartment)
-    updateValues.$set["areaSaleApartment"] = req.body.areaSaleApartment;
-  else updateValues.$set["areaSaleApartment"] = "";
-
-  try {
-    await models.usersSchema.findByIdAndUpdate(userId, updateValues),
-      res.status(200).send(console.log(updateValues));
-  } catch (err) {
-    res.status(500).send(err);
-  }
+  updateUser: async (req, res) => {
+    const userId = req.params.id;
+    const where = req.body.where;
+    const value = req.body.value;
+    const update = { [where]: value };
+    // console.log("update from controller:", update);
+    try {
+      const user = await models.usersSchema.findOne({_id:userId});
+      if (user) {
+        user[where] = value;
+        await user.save();
+        res.status(200).json({
+          isSucceed: true,
+          message: `The '${where}' of User ID Number ${userId}, updated to: ${JSON.stringify(value)}.`,
+          user
+        });
+      } else {
+        res.status(406).json({
+          isSucceed: false,
+          message: `The user with UID '${userId}' does not exist in the database. Please remove the user from the LocalStorage.`,
+        });
+      }
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  },
 };

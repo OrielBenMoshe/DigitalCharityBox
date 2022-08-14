@@ -16,4 +16,25 @@
         height: 100%;
         width: 100%;
     }
+
+    form {
+        width: 90%;
+        .og-errors{
+            margin-bottom: 10px;
+        }
+    }
+    .Register {
+        text-align: center;
+        .ant-form-item-explain-error {
+            text-align: start;
+        }
+        justify-content: flex-start;
+        button { width: 100%;}
+        // margin: auto;
+        // text-align: center;
+        // height: 100%;
+        // form, .googleRegisterBtn {
+        //     width: 80%;
+        // }
+    }
 }

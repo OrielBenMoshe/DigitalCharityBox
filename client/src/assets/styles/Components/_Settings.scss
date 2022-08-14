@@ -13,18 +13,18 @@
     .content > .ant-divider:last-child {
         display: none;
      } 
-    .manual-value-wrapper .ant-input-number {
-        // position: relative;
-        &::after {
-            content: "₪";
-            position: absolute;
-            left: 26px;
-            top: 56%;
-            transform: translateY(-50%);
-            font-weight: 200;
-            font-size: 12px;
-        }
-    }
+    // .manual-value-wrapper .ant-input-number {
+    //     // position: relative;
+    //     &::after {
+    //         content: "₪";
+    //         position: absolute;
+    //         left: 26px;
+    //         top: 56%;
+    //         transform: translateY(-50%);
+    //         font-weight: 200;
+    //         font-size: 12px;
+    //     }
+    // }
     .footer {
 
     }

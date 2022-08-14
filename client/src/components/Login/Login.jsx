@@ -4,11 +4,14 @@ import { auth, logInWithEmailAndPassword, signInWithGoogle } from '../../firebas
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 
+import { Input } from 'antd';
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+
 
     useEffect(() => {
         if (loading) {
@@ -22,14 +25,14 @@ export default function Login() {
     return (
         <div className="login">
             <div className="login__container">
-                <input
+                <Input
                     type="text"
                     className="login__textBox"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="כתובת אי-מייל"
                 />
-                <input
+                <Input
                     type="password"
                     className="login__textBox"
                     value={password}

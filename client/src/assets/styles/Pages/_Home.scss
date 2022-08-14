@@ -16,6 +16,7 @@
             width: 312px;
             font-size: 45px
         }
+
         .modal-link {
             font-size: 18px;
             margin-bottom: 20px;
@@ -25,7 +26,7 @@
             max-width: calc(100vw - 60px);
         }
 
-        .signup-link button{
+        .signup-link button {
             height: 60px;
             width: 160px;
             // position: absolute;
@@ -59,8 +60,15 @@
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-                width: fit-content;
+                width: max-content;
             }
+        }
+
+        .ant-spin {
+            position: absolute;
+            right: 50%;
+            top: 50%;
+            transform: translate(50%);
         }
 
         .charity-box {
@@ -72,9 +80,9 @@
 
             &-image {
                 position: absolute;
-                top: -10%;
-                right: 0;
-                width: 100%;
+                top: 10%;
+                right: 60px;
+                width: 510px;
             }
 
             &.is-dropped {
@@ -82,10 +90,14 @@
                     transform: translateY(100%);
                 }
             }
+
             .coins-wrapper {
                 display: revert;
                 overflow: hidden;
                 z-index: 2;
+                margin: auto;
+                height: 146px;
+                clip-path: polygon(0 0, 100% 0, 100% 31%, 0 100%);
             }
         }
 
@@ -110,11 +122,12 @@
             grid-auto-flow: column;
             gap: 6px;
             position: relative;
-            
+
             .coin:hover,
             .coin:active {
                 border-color: #c9c9c9;
             }
+
             .coin {
                 position: relative;
                 border-radius: 50px;
@@ -123,11 +136,13 @@
                 transition: border 0.5s;
                 transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1);
                 touch-action: none;
-                width: 100%;    
+                width: 100%;
+
                 img {
                     width: 100%;
                     max-width: 74px;
                 }
+
                 h2 {
                     position: absolute;
                     top: 50%;
@@ -148,10 +163,12 @@
             margin-top: 26px;
             border-radius: 12px 12px 0 0;
             background-color: $primary-color;
+
             .ant-input-number {
                 position: relative;
                 margin-inline-start: 78px;
                 width: 72px;
+
                 &::after {
                     content: "₪";
                     position: absolute;
@@ -161,6 +178,7 @@
                     font-weight: 200;
                     font-size: 12px;
                 }
+
                 &::before {
                     content: "סכום אחר:";
                     position: absolute;

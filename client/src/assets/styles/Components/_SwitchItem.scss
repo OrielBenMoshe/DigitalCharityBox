@@ -12,11 +12,22 @@
     .manual-value-wrapper {
         position: relative;
         .ant-input-number {
-            width: 70px;
+            width: 68px ;
             position: absolute;
             top: 50%;
-            left: 50%;
+            left: 35%;
             transform: translate(-50%, -50%);
+            font-size: 26px;
+            background: #ffffff00;
+            color: inherit;
+            border: 0;
+            input {
+                font-weight: bold;
+                font-family: auto;
+                text-shadow: 1px -1px 0px #feeac6, -1px 1px 1px #747474;
+                color: goldenrod;
+
+            }
         }
     }
     // input {    

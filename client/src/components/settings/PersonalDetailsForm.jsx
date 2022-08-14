@@ -1,52 +1,29 @@
 import React, { useRef, useEffect, useState, createRef } from 'react';
 import { Button, Form, Input } from 'antd';
 import { Link } from "react-router-dom";
-import { PostToServer } from "../../getData";
-
-import { state } from '../../state';
-import { useSnapshot } from 'valtio';
-
-import { Storage } from '@capacitor/storage';
 
 export default function PersonalDetailsForm(props) {
-    const [initialValues, setInitialValues] = useState({ ...state.user });
     const formRef = createRef();
     const firstInputRef = useRef();
-    const snap = useSnapshot(state);
-
-    const savePersonalInfo = (values) => {
-        // await Storage.set({ key: "personalInfo", value: JSON.stringify(values) })
-        // state.user.personalInfo = { ...state.user.personalInfo, ...values };
-    }
 
 
     const onFinish = (values) => {
-        console.log('Success:', values);
-        // PostToServer(
-        //     "/api/addUser",
-        //      {...values, firebaseUID: state.firebaseUID}
-        //   );
-        // savePersonalInfo(values);
+        // console.log('Success:', values);
         // props.setVisible(false);
-        // props.formRefForward({ response: "success" })
-
+        props.formResponse("success");
+        props.setUserDetails({...props.userDetails, ...values})
     };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
-        // props.formRefForward({ response: "failed" })
+        props.formResponse("failed");
     };
-
     useEffect(() => {
         firstInputRef.current.focus();
         props.formRefForward(formRef.current);
+        // console.log('formRef.current:', formRef.current);
+
     }, [])
-
-    // useEffect(() => {
-    //     setInitialValues({ ...state.user.personalInfo });
-    // }, [state])
-
-
 
     return (
         <div className='settings PersonalDetailsForm'>
@@ -55,12 +32,17 @@ export default function PersonalDetailsForm(props) {
                 <h3>כדי לרשום את החשבונית על שמך ולשלוח לך בדואר</h3>
             </div>
             <Form
+            disabled
                 className='content'
-                name="basic"
+                name="PersonalForm"
                 ref={formRef}
                 layout="vertical"
                 initialValues={{
                     remember: true,
+                    displayName: props.userDetails.displayName ? props.userDetails.displayName : props.userDetails.fullName,
+                    phoneNumber: props.userDetails.phoneNumber && props.userDetails.phoneNumber,
+                    city: props.userDetails && props.userDetails.city,
+                    address: props.userDetails && props.userDetails.address,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
@@ -68,19 +50,19 @@ export default function PersonalDetailsForm(props) {
                 scrollToFirstError
             >
                 <Form.Item
-                    label="שם פרטי"
-                    name="firstName"
-                    // rules={[
-                    //     {
-                    //         required: true,
-                    //         message: 'לא אמרת מה השם שלך',
-                    //     },
-                    // ]}
-                    initialValue={""}
+                    // initialValue={"בדיקה בודק"}
+                    label="שם מלא"
+                    name="displayName"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'לא אמרת מה השם שלך',
+                        },
+                    ]}
                 >
                     <Input ref={firstInputRef} />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                     label="שם משפחה"
                     name="lastName"
                     // rules={[
@@ -91,31 +73,26 @@ export default function PersonalDetailsForm(props) {
                     // ]}
                 >
                     <Input />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                     label="מספר טלפון"
                     name="phoneNumber"
-                    // rules={[
-                    //     {
-                    //         required: true,
-                    //         message: 'מה מספר הטלפון שלך?',
-                    //     },
-                    // ]}
+                    // initialValue="05005005005"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'מה מספר הטלפון שלך?',
+                        },
+                    ]}
                 >
                     <Input />
                 </Form.Item>
-                {/* <Form.Item
-                    label="דואר אלקטרוני"
-                    name="email"
-
-                >
-                    <Input />
-                </Form.Item> */}
                 <Form.Item
                 >
                     <Form.Item
                         label="כתובת"
                         name="address"
+                        // initialValue="הבדיקה 70"
                         style={{
                             display: 'inline-block',
                             width: 'calc(56%)',
@@ -126,6 +103,7 @@ export default function PersonalDetailsForm(props) {
                     <Form.Item
                         label="ישוב"
                         name="city"
+                        // initialValue="קרית בדיקות"
                         style={{
                             display: 'inline-block',
                             width: 'calc(44% - 13px)',
