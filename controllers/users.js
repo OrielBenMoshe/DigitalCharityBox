@@ -33,7 +33,7 @@ module.exports = {
         { label: "בשחרית", time: "8:15", active: false },
         { label: "במנחה", time: "18:05", active: false },
         { label: "בזמן אחר", time: "11:00", active: false },
-      ]
+      ],
     });
     try {
       await newUser.save();
@@ -46,21 +46,51 @@ module.exports = {
   },
 
   listUsers: async (req, res) => {
-    const listUsers = await models.usersSchema.find();
     try {
-      res.send(listUsers);
+      const listUsers = await models.usersSchema.find();
+      // console.log('listUsers:', listUsers);
+      if (res) {
+        res.status(200).json({
+          isSucceed: true,
+          message: `${listUsers.length} users is found.`,
+          users: listUsers,
+        })
+      } else {
+        return {
+          isSucceed: true,
+          message: `${listUsers.length} users is found.`,
+          users: listUsers,
+        }
+      }
     } catch (err) {
-      res.status(500).send(err);
+      if (res) {
+        console.log(err);
+        res.status(500).send(err)
+      } else
+        return {
+          isSucceed: false,
+          message: err.message
+        }
     }
   },
 
   findUser: async (req, res) => {
     const userId = req.params.id;
-    const findUser = await models.usersSchema.findOne({
-      firebaseUID: userId,
-    });
     try {
-      res.send(findUser);
+      const findUser = await models.usersSchema.findOne({
+        firebaseUID: userId,
+      });
+      // console.log("findUser:", findUser);
+      findUser
+        ? res.status(200).json({
+            isSucceed: true,
+            message: `The User with UID: '${userId}' is founded in DB.`,
+            user: findUser,
+          })
+        : res.status(200).json({
+            isSucceed: false,
+            message: `The User with UID: '${userId}' is not found in DB.`,
+          });
     } catch (err) {
       res.status(500).send(err);
     }
@@ -73,14 +103,16 @@ module.exports = {
     const update = { [where]: value };
     // console.log("update from controller:", update);
     try {
-      const user = await models.usersSchema.findOne({_id:userId});
+      const user = await models.usersSchema.findOne({ _id: userId });
       if (user) {
         user[where] = value;
         await user.save();
         res.status(200).json({
           isSucceed: true,
-          message: `The '${where}' of User ID Number ${userId}, updated to: ${JSON.stringify(value)}.`,
-          user
+          message: `The '${where}' of User ID Number ${userId}, updated to: ${JSON.stringify(
+            value
+          )}.`,
+          user,
         });
       } else {
         res.status(406).json({

@@ -21,10 +21,6 @@ export function Droppable(props) {
     const [response, setResponse] = useState()
     const navigate = useNavigate();
 
-    const style = {
-        border: isOver ? '4px solid green' : undefined,
-    };
-
     const updateTotalAmount = (value) => {
         const id = user._id;
         const where = "totalAmount";
@@ -58,14 +54,13 @@ export function Droppable(props) {
                 setTimeout(() => {
                     setIsDropped('');
                     updateTotalAmount(droppedCoin.value);
-                    // state.user.totalAmount += droppedCoin.value;
                 }, 400);
             }, 400);
         }
     }, [props.children])
 
     return (
-        <div className={`${props.className} ${isDropped}`} ref={setNodeRef} style={style}>
+        <div className={`${props.className} ${isDropped}`} ref={setNodeRef}>
             {props.children}
         </div>
     );

@@ -40,27 +40,48 @@ export default function FirstRegistrationSteps({ store }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        creditCardToken && crearteSumitCustomer();
+        creditCardToken && createSumitCustomer();
         checkUserInLocalStorage();
     }, [])
 
     /** You get here if a new Customer is created in Sumit CRM. */
     useEffect(() => {
-        if (sumitCustomer && sumitCustomer.customerId) {
-            // console.log("sumitCustomer:", sumitCustomer);
-            addUserToDB();
-        } else {
-            // console.log("sumitCustomer:", sumitCustomer);
+        if (sumitCustomer) {
+            if (sumitCustomer.customerId) {
+                // console.log("sumitCustomer:", sumitCustomer);
+                addUserToDB();
+            } else {
+                console.log("sumitCustomer:", sumitCustomer);
+                if (sumitCustomer.UserErrorMessage) {
+                    searchParams.delete('og-token');
+                    searchParams.delete('citizenId');
+                    setSearchParams(searchParams);
+                    message.error(sumitCustomer.UserErrorMessage);
+                    setTimeout(() => {
+                        window.location.reload(false);
+                    }, 2000);
+                }
+            }
         }
     }, [sumitCustomer])
 
     /** You get here if a new user is created in the DB. */
     useEffect(() => {
         if (DBUser) {
+
+            if (DBUser._id) {
             store.user = DBUser;
-            localStorage.removeItem('temporaryUserDetails');
             setLocalStorage("user", DBUser);
+            setLocalStorage('temporaryUserDetails', 'remove');
+            setLocalStorage('temporaryEmailPassword', 'remove');
             navigate('/Home');
+            } else {
+            console.log("DBUser:", DBUser);
+            searchParams.delete('og-token');
+            searchParams.delete('citizenId');
+            setSearchParams(searchParams);
+            prev()
+            }
         }
     }, [DBUser])
 
@@ -74,25 +95,34 @@ export default function FirstRegistrationSteps({ store }) {
 
 
     const checkUserInLocalStorage = async () => {
-        try {
-            const user = await setLocalStorage('user')
-            console.log(user);
-            if (user !== 'empty') {
-                setLocalStorageUser(user);
-                setLocalStorage("temporaryUserDetails", "remove")
-                setLocalStorage("temporaryEmailPassword", "remove")
-                setTimeout(() => {
-                    navigate("/home");
-                }, 1000);
+        const user = await setLocalStorage('user')
+        console.log("user in localStorage:", user);
+        if (user && user.customerInfo) {
+            setLocalStorageUser(user);
+            setLocalStorage("temporaryUserDetails", "remove")
+            setLocalStorage("temporaryEmailPassword", "remove")
+            setTimeout(() => {
+                navigate("/home");
+            }, 1000);
+        } else {
+            const temporaryEmailPassword = await setLocalStorage('temporaryEmailPassword')
+            if (temporaryEmailPassword.email) {
+                next();
             }
+            console.log("temporaryEmailPassword:", temporaryEmailPassword);
 
-        } catch (error) {
-            console.log(error);
+            const temporaryUserDetails = await setLocalStorage('temporaryUserDetails')
+            console.log("temporaryUserDetails:", temporaryUserDetails);
+            if (temporaryUserDetails.firebaseUID) {
+                setUserDetails({ ...userDetails , ...temporaryUserDetails });
+                next();
+            }
         }
+
     }
 
     /** Create Customer in Sumit CRM */
-    const crearteSumitCustomer = async () => {
+    const createSumitCustomer = async () => {
         console.log("crearteSumitCustomer");
         try {
             const data = await setLocalStorage("temporaryUserDetails");
@@ -114,20 +144,6 @@ export default function FirstRegistrationSteps({ store }) {
         } catch (error) {
             console.error(error);
         }
-    }
-
-
-    /** The last step in the registration process. */
-    const RegistrationEnd = () => {
-        if (formRef) {
-            console.log("formRef:", formRef);
-            formRef.submit();
-        }
-        // message.success('...ההגדרות הראשוניות הושלמו בהצלחה, הקופה כבר מוכנה.');
-        console.log({ ...userDetails, ...sumitCustomer });
-        const data = { ...userDetails, ...sumitCustomer }
-        /** Add new User to MongoDB */
-        // PostData("/api/addUser/", data, setUserFromDB)
     }
 
     /** Steps navigation */
@@ -186,7 +202,7 @@ export default function FirstRegistrationSteps({ store }) {
 
     return (
         localStorageUser || creditCardToken
-            ? <Spin size="large"/>
+            ? <Spin size="large" />
             : (
                 <div className='FirstRegistrationSteps' >
                     <Steps current={current} size="small" direction="horizontal" responsive={false}>

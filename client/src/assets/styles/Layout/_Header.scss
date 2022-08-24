@@ -1,27 +1,32 @@
 .Header {
     z-index: 2;
     box-shadow: rgba(37, 16, 47, 0.2) 0px 2px 12px 0px;
-    height: 80px; 
-    @media #{$large} {
-    }
+    height: 80px;
+
+    @media #{$large} {}
+
     @media #{$small} {
-        height: 40px; 
+        height: 40px;
         margin-bottom: 20px;
     }
-    
+
 }
+
 #DrawerMain {
     .ant-drawer-body {
         padding: 0;
     }
+
     .ant-drawer-title {
         margin-inline: 10px;
         font-size: 20px;
         font-weight: 600;
     }
+
     .ant-divider {
         margin-block: 0;
     }
+
     .Settings-item {
         .ant-btn {
             padding: 0 12px;
@@ -33,4 +38,12 @@
         }
     }
 
+    .logout-btn {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        height: 40px;
+        border-top: 1px solid #f0f0f0;
+        text-align: start;
+    }
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Drawer, message } from "antd";
+
 import {
   BellOutlined,
   CreditCardOutlined,
@@ -12,6 +13,7 @@ import DisplaySettings from "../../settings/DisplaySettings";
 import MemoSettings from "../../settings/MemoSettings";
 import CreditDetailsForm from "../../settings/CreditDetailsForm";
 import PersonalDetailsForm from "../../settings/PersonalDetailsForm";
+import CreditCardDisplay from "../../settings/CreditCardDisplay"
 
 /** Valtio */
 import { state } from "../../../state";
@@ -31,6 +33,8 @@ export default function Settings(props) {
   const [userDetails, setUserDetails] = useState(snap.user.personalInfo);
   const [display, setDisplay] = useState(snap.user.display);
   const [reminders, setReminders] = useState(snap.user.reminders);
+  const [costumerInfo, setCostumerInfo] = useState(snap.user.costumerInfo);
+
   const [update, setUpdate] = useState();
   const [response, setResponse] = useState();
   
@@ -53,11 +57,15 @@ export default function Settings(props) {
 
   const onClose = (updatedData) => {
     console.log("updatedData:", updatedData);
-    const data = {
-      where: "display",
-      value: {coins: [...updatedData]}
+    if (updatedData && updatedData.coins){
+      const data = {
+        where: "display",
+        value: updatedData
+      }
+      UpdateData(`/api/updateUser/${snap.user._id}`, data, setResponse);
+    } else {
+      setVisible(false);
     }
-    UpdateData(`/api/updateUser/${snap.user._id}`, data, setResponse);
   };
 
   const updateLocalStrogeAndState = async () => {
@@ -105,7 +113,9 @@ export default function Settings(props) {
             onClose={onClose}
           />;
         case "פרטי כרטיס אשראי":
-          return <CreditDetailsForm
+          return <CreditCardDisplay
+            costumerInfo={costumerInfo}
+            setCostumerInfo={setCostumerInfo}
           />;
         default:
           break;

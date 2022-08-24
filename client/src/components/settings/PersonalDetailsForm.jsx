@@ -21,7 +21,7 @@ export default function PersonalDetailsForm(props) {
     useEffect(() => {
         firstInputRef.current.focus();
         props.formRefForward(formRef.current);
-        // console.log('formRef.current:', formRef.current);
+        console.log('props.userDetails:', props.userDetails);
 
     }, [])
 
@@ -32,17 +32,17 @@ export default function PersonalDetailsForm(props) {
                 <h3>כדי לרשום את החשבונית על שמך ולשלוח לך בדואר</h3>
             </div>
             <Form
-            disabled
+                disabled={props.isSignup ? false : true}
                 className='content'
                 name="PersonalForm"
                 ref={formRef}
                 layout="vertical"
                 initialValues={{
                     remember: true,
-                    displayName: props.userDetails.displayName ? props.userDetails.displayName : props.userDetails.fullName,
-                    phoneNumber: props.userDetails.phoneNumber && props.userDetails.phoneNumber,
-                    city: props.userDetails && props.userDetails.city,
-                    address: props.userDetails && props.userDetails.address,
+                    displayName: (props.userDetails && props.userDetails.displayName) ? props.userDetails.displayName : (props.userDetails && props.userDetails.fullName),
+                    phoneNumber: (props.userDetails && props.userDetails.phoneNumber) && props.userDetails.phoneNumber,
+                    city: props.userDetails && props.userDetails.city && props.userDetails.city,
+                    address: props.userDetails && props.userDetails.address && props.userDetails.address,
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}

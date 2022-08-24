@@ -1,60 +1,121 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, logInWithEmailAndPassword, signInWithGoogle } from '../../firebase';
-import { useAuthState } from "react-firebase-hooks/auth";
-import "./Login.css";
+import { Input, Spin, Modal, Form, Button, Divider, message } from "antd";
 
-import { Input } from 'antd';
+/** Firebase Authetication */
+import { auth, logInWithEmailAndPassword, signInWithGoogle, sendPasswordReset } from '../../firebase';
+// import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [user, loading, error] = useAuthState(auth);
+
+import { GetData } from "../../serverRequests";
+import setLocalStorage from "../../setLocalStorage";
+
+/** Valtio */
+import { state } from "../../state";
+
+
+export default function Login({ setUserDetails, next }) {
+    // const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+    const [userFromDB, setUserFromDB] = useState();
+    const [email, setEmail] = useState();
+    const [firebaseUser, setFirebaseUser] = useState();
+    const emailLoginRef = useRef(null);
 
+    // useEffect(() => {
+    //     if (loading) {
+    //         // maybe trigger a loading screen
+    //         return;
+    //     }
+    //     console.log("user:", user);
+
+    // }, [user, loading]);
 
     useEffect(() => {
-        if (loading) {
-            // maybe trigger a loading screen
-            return;
+        emailLoginRef.current.focus();
+    }, [])
+
+    useEffect(() => {
+        if (userFromDB && userFromDB.user) {
+            setLocalStorage("user", userFromDB.user)
+                .then((user) => {
+                    state.user = user;
+                    message.success('ההתחברות הצליחה!')
+                    setTimeout(() => {
+                        navigate('/Home');
+                    }, 1000);
+                })
+        } else {
+            if (userFromDB && userFromDB.message) {
+                console.log(userFromDB.message);
+                message.success('ההתחברות הצליחה אבל אנחנו רואים שחסרים לנו פרטים עליך, בו תמשיך ברישום')
+                setUserDetails({
+                    firebaseUID: firebaseUser.uid,
+                    displayName: firebaseUser.displayName,
+                    email: firebaseUser.email
+                })
+                next();
+            }
         }
-        console.log("user:", user);
-        if (user) navigate("/Home");
-    }, [user, loading]);
+    }, [userFromDB])
+
+
+    const onFinish = async ({ email, password }) => {
+        // console.log('Success:', {email, password});
+        try {
+            const res = await logInWithEmailAndPassword(email, password);
+            if (res.user) {
+                setFirebaseUser(res.user)
+                GetData(`/api/findUser/${res.user.uid}`, setUserFromDB);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
 
     return (
-        <div className="login">
-            <div className="login__container">
-                <Input
-                    type="text"
-                    className="login__textBox"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="כתובת אי-מייל"
-                />
-                <Input
-                    type="password"
-                    className="login__textBox"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="סיסמה"
-                />
-                <button
-                    className="login__btn"
-                    onClick={() => logInWithEmailAndPassword(email, password)}
-                >
-                    התחבר
-                </button>
-                <button className="login__btn login__google" onClick={signInWithGoogle}>
-                    התחבר עם Google
-                </button>
-                <div>
-                    <Link to="/reset">שכחת סיסמה?</Link>
-                </div>
-                <div>
-                    אין לך עדיין חשבון? <Link to="/register">הירשם</Link> כעת.
-                </div>
-            </div>
-        </div>
+        <Form
+            name="FirebaseLoginForm"
+            initialValues={{
+                remember: true,
+                // email: user && user.email,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+        >
+            <Form.Item name="email"
+                rules={[
+                    {
+                        required: true,
+                        type: 'email',
+                        message: 'כדי להתחבר צריך להזין את המייל שלך..',
+                    },
+                ]}
+            >
+                <Input placeholder="דואר אלקטרוני" ref={emailLoginRef} onInput={(e) => setEmail(e.target.value)} />
+            </Form.Item>
+            <Form.Item name="password"
+                rules={[
+                    {
+                        required: true,
+                        message: 'שכחת להזין סיסמה',
+                    },
+                ]}
+            >
+                <Input.Password placeholder="סיסמה" />
+            </Form.Item>
+            <Form.Item>
+                <Button htmlType="submit" size="large">התחבר</Button>
+            </Form.Item>
+            {/* <Button type="primary" size="large" onClick={signInWithGoogle}>
+                אני רוצה להתחבר עם Google
+            </Button> */}
+            <Divider>שכחת סיסמה?</Divider>
+            <Button onClick={() => sendPasswordReset(email)}>לאיפוס סיסמה תלחצו עלי</Button>
+        </Form>
     );
 };

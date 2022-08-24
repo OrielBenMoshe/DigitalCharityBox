@@ -21,6 +21,8 @@
     "express": "^4.17.1",
     "got": "^12.1.0",
     "mongoose": "^6.4.1",
+    "node-cron": "^3.0.2",
     "nodemon": "^2.0.19"
-  }
+  },
+  "type": "commonjs"
 }

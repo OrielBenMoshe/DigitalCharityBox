@@ -60,7 +60,7 @@ export default function CreditDetailsForm(props) {
                         maxLength="20" 
                         data-og="cardnumber" 
                         name='cardNumber' 
-                        value={"4557-4304-0205-3340"} 
+                        // value={"4557-4304-0205-3340"} 
                     />
                 </Form.Item>
 
@@ -76,19 +76,19 @@ export default function CreditDetailsForm(props) {
                         ]}
                     >
                         <Input
-                            value={2025}
+                            // value={2025}
                             type="number"
                             size="4"
                             style={{ width: '60%' }}
                             maxLength="4"
-                            min={new Date().getFullYear()}
+                            min={new Date().getFullYear() - 5}
                             max={new Date().getFullYear() + 20}
                             name="expirationYear"
                             data-og="expirationyear"
                             onChange={(e) => setYear(e.target.value)}
                         />
                         <Input
-                            value={2}
+                            // value={2}
                             type="number"
                             size="12"
                             style={{ width: '40%' }}
@@ -114,7 +114,9 @@ export default function CreditDetailsForm(props) {
                         style={{ width: '50%' }} 
                         maxLength="4" 
                         name="CVV" 
-                        data-og="cvv" value={883} />
+                        data-og="cvv" 
+                        // value={883} 
+                    />
                 </Form.Item>
 
                 <Form.Item label="מספר תעודת זהות" rules={[

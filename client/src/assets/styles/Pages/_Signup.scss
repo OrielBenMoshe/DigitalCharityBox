@@ -30,11 +30,19 @@
         }
         justify-content: flex-start;
         button { width: 100%;}
-        // margin: auto;
-        // text-align: center;
-        // height: 100%;
-        // form, .googleRegisterBtn {
-        //     width: 80%;
-        // }
+        .login-container {
+            width: 90%;
+            margin-block: auto 20px;
+        }
+        
     }
+    
+}
+#FirebaseLoginForm {
+    width: 90%;
+    margin: auto;
+    button { width: 100%;}
+}
+.login-modal .ant-modal-footer {
+    text-align: right !important;
 }

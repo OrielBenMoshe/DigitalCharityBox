@@ -4,7 +4,6 @@ import { Storage } from "@capacitor/storage";
  * Return the "value" of LocalStorage according the "key".
  */
 const setLocalStorage = async (key, val) => {
-  console.log("val:",val);
   if (key && val) {
     if (val === "remove") {
       await Storage.remove( { key } );

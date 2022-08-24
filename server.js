@@ -1,8 +1,11 @@
+
 const cors = require("cors");
 const express = require("express");
 const router = require("express").Router();
 const app = express();
 const mongoose = require("mongoose");
+const axios = require("axios");
+require('./cron.js');
 
 const path = require("path");
 const { connectToDb, models } = require("./models");
@@ -10,14 +13,20 @@ const {
   addUser,
   listUsers,
   findUser,
-  updateUser
+  updateUser,
 } = require("./controllers/users");
-const { getGateway, setCustomer, getOfficeGuy } = require("./controllers/sumit");
+const {
+  getGateway,
+  setCustomer,
+  getOfficeGuy,
+  setCreditCardsCharge,
+} = require("./controllers/sumit");
 
 app.use(cors());
 app.use(express.json());
 
 const dotenv = require("dotenv");
+const { log } = require("console");
 
 dotenv.config();
 // app.use(express.static(path.join(__dirname, "build")));
@@ -53,29 +62,6 @@ app.put("/api/updateUser/:id", updateUser);
 app.get("/api/sumit/getGateway", getGateway);
 app.get("/api/sumit/getOfficeGuy", getOfficeGuy);
 app.post("/api/sumit/setCustomer", setCustomer);
+app.post("/api/sumit/setCreditCardsCharge", setCreditCardsCharge);
 
-// app.post("/sumit/setCustomer", (res, req) => {
 
-//   // {
-//   //   "Credentials": {
-//   //     "CompanyID": 0,
-//   //     "APIKey": "string"
-//   //   },
-//   //   "Customer": {
-//   //     "Name": "string",
-//   //     "Phone": "string",
-//   //     "EmailAddress": "string",
-//   //     "SearchMode": "Automatic"
-//   //   },
-//   //   "PaymentMethod": {
-//   //     "CreditCard_ExpirationMonth": 12,
-//   //     "CreditCard_ExpirationYear": 0,
-//   //     "CreditCard_CitizenID": "string",
-//   //     "CreditCard_Token": "string",
-//   //     "Type": "CreditCard"
-//   //   }
-
-//   console.log("req.body:", req.body);
-//   app.post('https://www.myofficeguy.com/api/billing/paymentmethods/setforcustomer', )
-
-// });

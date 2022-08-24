@@ -70,6 +70,12 @@
             top: 50%;
             transform: translate(50%);
         }
+        // .Home #front-app .charity-box {
+        //     background-image: url(/static/media/charity_box.c456e56e.svg);
+        //     background-repeat: no-repeat;
+        //     background-position: 122%;
+        //     background-size: 130%;
+        // }
 
         .charity-box {
             position: relative;
@@ -88,6 +94,7 @@
             &.is-dropped {
                 .coin {
                     transform: translateY(100%);
+                    border: 0 !important;
                 }
             }
 

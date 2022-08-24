@@ -35,7 +35,8 @@ export default function DisplaySettingsForm({ onClose, display }) {
     }, [update])
 
     const sendUpdates = () => {
-        onClose(coinsData);
+        console.log("coinsData:",coinsData);
+        onClose({coins: [...coinsData]});
     }
 
 
