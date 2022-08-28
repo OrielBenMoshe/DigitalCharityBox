@@ -15,7 +15,7 @@ import Shnekel from "../../../assets/images/shnekel_heads.svg";
 import HameshShekel from "../../../assets/images/hameshShekel_heads.svg";
 import EserShekel from "../../../assets/images/eserShekel_heads.svg";
 import EmptyCoin from "../../../assets/images/empty_coin.svg";
-import CharityBoxImage from "../../../assets/images/charity_box.svg";
+import CharityBoxImage from "../../../assets/images/charity_box.png";
 
 
 export default function CharityBox({ store, user }) {
@@ -82,7 +82,7 @@ export default function CharityBox({ store, user }) {
             {user 
                 ? (<>
                     <DndContext onDragEnd={handleDragEnd}>
-                        <h2>{`שלום ${userName && userName}, טוב לראותך!`}</h2>
+                        <h2 className='greetings' >שלום <strong>{userName && userName}</strong>, טוב לראותך!</h2>
                         <Droppable id="charityBox" className="charity-box">
                             <div className="coins-wrapper">
                                 {parent === "charityBox"

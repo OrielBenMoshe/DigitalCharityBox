@@ -13,7 +13,7 @@ h3 {
 
 h1, h2 { font-weight: bold; }
 h2 { font-size: 24px; }
-h3 { font-weight: 400; }
+h3 { font-weight: 400 !important; }
 
 .container {
     // padding-inline: 30px;
@@ -23,8 +23,7 @@ html {
     background-color: lightgray  ;
 }
 body {
-    font-family: 'Noto Serif Hebrew', serif !important;
-    font-weight: 600 !important;  
+    font-family: 'Heebo' !important;
     background-color: white;
     &, .ant-drawer {
         margin: auto;

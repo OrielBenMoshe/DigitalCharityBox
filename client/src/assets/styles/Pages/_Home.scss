@@ -41,7 +41,7 @@
     #front-app {
         @include flex(space-between, center, column);
         height: 100%;
-
+        background-color: $bg-color-1;
         .Header {
             @include flex(null, center);
             position: relative;
@@ -63,7 +63,9 @@
                 width: max-content;
             }
         }
-
+        .greetings{
+            font-weight: normal;
+        }
         .ant-spin {
             position: absolute;
             right: 50%;
@@ -86,9 +88,10 @@
 
             &-image {
                 position: absolute;
-                top: 10%;
-                right: 60px;
-                width: 510px;
+                bottom: 10%;
+                right: 0;
+                width: 100%;
+                min-width: 340px;
             }
 
             &.is-dropped {
@@ -170,7 +173,7 @@
             margin-top: 26px;
             border-radius: 12px 12px 0 0;
             background-color: $primary-color;
-
+            box-shadow: rgba(37, 16, 47, 0.2) 0px 0px 6px 0px;
             .ant-input-number {
                 position: relative;
                 margin-inline-start: 78px;

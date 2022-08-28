@@ -100,7 +100,7 @@ module.exports = {
     const userId = req.params.id;
     const where = req.body.where;
     const value = req.body.value;
-    const update = { [where]: value };
+    // const update = { [where]: value };
     // console.log("update from controller:", update);
     try {
       const user = await models.usersSchema.findOne({ _id: userId });
@@ -122,6 +122,27 @@ module.exports = {
       }
     } catch (err) {
       res.status(500).send(err.message);
+    }
+  },
+  clearTotalAmount: async (customerId) => {
+    try {
+      const user = await models.usersSchema.findOne({ 'costumerInfo.id': customerId });
+      if (user) {
+        user.totalAmount = 0;
+        await user.save();
+        return {
+          isSucceed: true,
+          message: `The Total-Amount of Customer ID Number ${customerId}, has been cleared.`,
+          user,
+        };
+      } else {
+        return {
+          isSucceed: false,
+          message: `The Customer with ID '${customerId}' does not exist in the database.`,
+        };
+      }
+    } catch (err) {
+      console.log("error:", err);
     }
   },
 };

@@ -56,8 +56,8 @@ module.exports = {
       },
       SingleUseToken: customer.token,
     };
-    /** Creating a new customer in Sumit CRM 
-     * and getting a customer ID. 
+    /** Creating a new customer in Sumit CRM
+     * and getting a customer ID.
      * */
     await axios
       .post(url, bodyRequest)
@@ -66,14 +66,13 @@ module.exports = {
         console.log(result);
         const data = result.data;
         if (data.Data && data.Data.CustomerID) {
-            const customer = {
-              customerId: data.Data.CustomerID,
-              lastDigits: data.Data.PaymentMethod.CreditCard_LastDigits,
-              expirationMonth:
-                data.Data.PaymentMethod.CreditCard_ExpirationMonth,
-              expirationYear: data.Data.PaymentMethod.CreditCard_ExpirationYear,
-            };
-            res.status(200).json(customer);
+          const customer = {
+            customerId: data.Data.CustomerID,
+            lastDigits: data.Data.PaymentMethod.CreditCard_LastDigits,
+            expirationMonth: data.Data.PaymentMethod.CreditCard_ExpirationMonth,
+            expirationYear: data.Data.PaymentMethod.CreditCard_ExpirationYear,
+          };
+          res.status(200).json(customer);
         } else res.status(406).json(data);
       })
       .catch((error) => {
@@ -83,11 +82,11 @@ module.exports = {
         });
       });
   },
-  setCreditCardsCharge: async (req, res) => {
+  setCreditCardsCharge: (req, res) => {
     const customers = req.body;
     const url = `${baseURL}/billing/payments/charge`;
-    let chargesList = [];
-    customers.forEach(async (customer) => {
+
+    return customers.map((customer) => {
       const bodyRequest = {
         Credentials: {
           CompanyID: process.env.COMPANY_ID,
@@ -110,40 +109,9 @@ module.exports = {
         ],
         SendDocumentByEmail: "true",
       };
-      await axios
-        .post(url, bodyRequest)
-        .then((res) => {
-          const data = res.data.Data
-          console.log("data:", data);
-          if (data) {
-            chargesList.push({
-              CustomerID: data.CustomerID,
-              Payment: {
-                ID: data.Payment.ID,
-                Date: data.Payment.Date,
-                Amount: data.Payment.Amount,
-                ValidPayment: data.Payment.ValidPayment,
-                StatusDescription: data.Payment.StatusDescription
-              },
-              DocumentID: data.DocumentID,
-              DocumentNumber: data.DocumentNumber,
-              DocumentDownloadURL: data.DocumentDownloadURL
-            })
-          } else {
-            console.log(`UserErrorMessage for Customer ID '${customer.costumerInfo.id}': `, res.data.UserErrorMessage);
-            chargesList.push({
-              CustomerID: customer.costumerInfo.id,
-              UserErrorMessage: res.data.UserErrorMessage
-            })
-          }
-        })
-        .catch((error) => {
-          console.log("error:", error);
-          // res.status(500).json({
-          //   error,
-          // });
-        });
+      return axios.post(url, bodyRequest).catch((error) => {
+        console.log("error:", error);
+      })
     });
-    return chargesList;
   },
 };
