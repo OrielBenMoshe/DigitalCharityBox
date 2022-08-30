@@ -1,0 +1,7 @@
+{
+  "name": "CharityBoxApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
