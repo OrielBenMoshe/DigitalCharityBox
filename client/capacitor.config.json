@@ -2,5 +2,10 @@
   "appId": "com.benmoshe.digitalcharitybox",
   "appName": "digital_charity_box",
   "webDir": "build",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": true,
+  "server": {
+    "hostname": "127.0.0.1",
+    "cleartext": true,
+    "allowNavigation": "['*']"
+  }
 }

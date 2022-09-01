@@ -8,6 +8,7 @@
         padding-block: 30px;
         position: relative;
         padding-bottom: 72px;
+        background-color: $bg-color-1;
 
         h1.entry-title {
             position: absolute;
@@ -15,6 +16,15 @@
             height: 100%;
             width: 312px;
             font-size: 45px
+        }
+
+        .charity-box-image {
+            background-color: #ebebeb;
+            padding-block: 12px;
+            margin-block: 0 16vh;
+            width: 44%;
+            border-radius: 6px;
+            box-shadow: 0 0 20px -4px rgba(0, 0, 0, 0.25);
         }
 
         .modal-link {
@@ -42,6 +52,7 @@
         @include flex(space-between, center, column);
         height: 100%;
         background-color: $bg-color-1;
+
         .Header {
             @include flex(null, center);
             position: relative;
@@ -63,15 +74,18 @@
                 width: max-content;
             }
         }
-        .greetings{
+
+        .greetings {
             font-weight: normal;
         }
+
         .ant-spin {
             position: absolute;
             right: 50%;
             top: 50%;
             transform: translate(50%);
         }
+
         // .Home #front-app .charity-box {
         //     background-image: url(/static/media/charity_box.c456e56e.svg);
         //     background-repeat: no-repeat;
@@ -174,6 +188,7 @@
             border-radius: 12px 12px 0 0;
             background-color: $primary-color;
             box-shadow: rgba(37, 16, 47, 0.2) 0px 0px 6px 0px;
+
             .ant-input-number {
                 position: relative;
                 margin-inline-start: 78px;

@@ -2,7 +2,8 @@
     @include flex(space-between, center, column);
     height: 100%;
     width: 100%;
-    
+    background-color: $bg-color-1;
+
     .steps-content {
         height: 100%;
         width: 100%;

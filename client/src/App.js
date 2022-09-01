@@ -15,7 +15,7 @@ function App() {
   const snap = useSnapshot(state);
 
   return (
-    <div className="App">
+    <div className="App" /*style={{ paddingTop: "env(safe-area-inset-top)" }}*/>
       <Routes>
         <Route index element={<Home store={state} snap={snap}/>} />
         <Route
